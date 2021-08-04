@@ -2,6 +2,8 @@
 
 A Clojure library designed to convert SQL statements into Elasticsearch queries
 
+[![CircleCI](https://circleci.com/gh/punit-naik/sqles/tree/master.svg?style=svg)](https://circleci.com/gh/punit-naik/sqles/tree/master)
+
 ## Usage
 
 FIXME
