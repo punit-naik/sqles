@@ -37,7 +37,7 @@
            (config/generate-server-url-from-config)))))
 
 (deftest es-server-test
-  (is (= "http://localhost:9200"
+  (is (= "http://localhost:9200/"
          (with-redefs [config/generate-server-url-from-config (constantly "http://localhost:9200")
                        config/server-up? (constantly true)]
            (config/generate-server-url-from-config)))))

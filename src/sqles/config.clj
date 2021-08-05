@@ -71,4 +71,4 @@
   (let [url (generate-server-url-from-config)
         is-server-up? (server-up? url)]
     (when is-server-up?
-      url)))
+      (add-trailing-backslash url))))
