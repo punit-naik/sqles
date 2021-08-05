@@ -14,16 +14,14 @@
   [table]
   (str (config/es-server) table))
 
-(def operators
+(def operators-used-without-spacing
+  "Operatos which can be used without spacing between operands"
   #{"="
     "<"
     "<="
     ">"
     ">="
-    "!="
-    "in"
-    "between"
-    "not"})
+    "!="})
 
 (defn- op->op-key
   [op]
