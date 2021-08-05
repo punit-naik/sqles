@@ -1,6 +1,7 @@
-(ns sqles.core
-  (:require [sqles.config :as config]))
+(ns sqles.core)
+
+;; Here is where the query execution code will go
 
 (defn -main
   [& args]
-  (println (config/es-server)))
+  (println "No Op"))
