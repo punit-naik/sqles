@@ -1,7 +1,7 @@
 (ns sqles.parse-sql
   (:require [clojure.string :as str]
             [sqles.query :as query]
-            [sqles.parse-sql.where :as where]))
+            [sqles.parse-sql.utils :refer [handle-clause-data]]))
 
 (defn query->es-op
   [clause]
@@ -35,10 +35,8 @@
   [query-parts]
   (take-while #(not (clause->query-fn %)) query-parts))
 
-(defn hangle-select-clause-data
-  "Cleans clause data by removing commas from fields
-   For the `select` clause"
-  [clause-data]
+(defmethod handle-clause-data "select"
+  [_ clause-data]
   (->> (mapcat (fn [cd] (filter seq (str/split cd #","))) clause-data)
        (map str/trim)))
 
@@ -60,13 +58,9 @@
       (if (empty? ps)
         result
         (let [clause (str/lower-case (first ps))
-              select-clause? (= (str/lower-case clause) "select")
-              where-clause? (= (str/lower-case clause) "where")
               clause-data (take-till-next-clause (rest ps))
               remaining-parts (drop (count clause-data) (rest ps))
-              clause-data (cond-> clause-data
-                            select-clause? hangle-select-clause-data
-                            where-clause? where/handle-where-clause-data)
+              clause-data (handle-clause-data clause clause-data)
               intermediate-es-query ((clause->query-fn clause) clause-data)]
           (recur remaining-parts
                  (update result :body merge intermediate-es-query)))))))

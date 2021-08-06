@@ -2,7 +2,8 @@
   (:require [clojure.test :refer [deftest is]]
             [sqles.config :as config]
             [sqles.parse-sql :as parse-sql]
-            [sqles.query :as query]))
+            [sqles.query :as query]
+            [sqles.parse-sql.utils :as utils]))
 
 (deftest query->es-op-test
   (is (= "/_search" (parse-sql/query->es-op "select")))
@@ -23,11 +24,11 @@
   (is (= ["a" "b" "c"] (parse-sql/take-till-next-clause ["a" "b" "c" "from" "test-2"])))
   (is (= ["test-3"] (parse-sql/take-till-next-clause ["test-3" "where" "x" "=" 1]))))
 
-(deftest hangle-select-clause-data-test
-  (is (= ["a" "b" "c"] (parse-sql/hangle-select-clause-data ["a," "b ," "c"])))
-  (is (= ["a" "b" "c"] (parse-sql/hangle-select-clause-data [" a," "b ," "c"])))
-  (is (= ["a" "b" "c"] (parse-sql/hangle-select-clause-data ["a, b, c"])))
-  (is (= ["a" "b" "c"] (parse-sql/hangle-select-clause-data ["a , b , c"]))))
+(deftest handle-select-clause-data-test
+  (is (= ["a" "b" "c"] (utils/handle-clause-data "select" ["a," "b ," "c"])))
+  (is (= ["a" "b" "c"] (utils/handle-clause-data "select" [" a," "b ," "c"])))
+  (is (= ["a" "b" "c"] (utils/handle-clause-data "select" ["a, b, c"])))
+  (is (= ["a" "b" "c"] (utils/handle-clause-data "select" ["a , b , c"]))))
 
 (deftest clean-query-test
   (is (= "select a,b,c from test-1" (parse-sql/clean-query "select a, b, c from test-1")))
