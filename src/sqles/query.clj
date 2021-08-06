@@ -8,7 +8,7 @@
                (some (fn [field]
                        (re-matches #".*\*" field))
                     fields))
-      {:_source fields})))
+      {:_source (map keyword fields)})))
 
 (defn from
   [table]
@@ -23,7 +23,7 @@
     ">="
     "!="})
 
-(defn- op->op-key
+(defn op->op-key
   [op]
   (get {"=" :equals
         "<" :less-than
@@ -32,7 +32,7 @@
         ">=" :greater-than-or-equals
         "!=" :not-equals
         "in" :in-set
-        "between" :in-range}
+        "between" :between-range-incl}
        op))
 
 (defmulti where
@@ -47,7 +47,7 @@
   [field _ value]
   {:range {(keyword field) {:lt value}}})
 
-(defmethod where :less-than
+(defmethod where :less-than-or-equals
   [field _ value]
   {:range {(keyword field) {:lte value}}})
 
@@ -55,19 +55,19 @@
   [field _ value]
   {:range {(keyword field) {:gt value}}})
 
-(defmethod where :greater-than
+(defmethod where :greater-than-or-equals
   [field _ value]
   {:range {(keyword field) {:gte value}}})
 
-(defmethod where :in-range
+(defmethod where :between-range-incl
   [field _ [lte gte]]
   {:range {(keyword field) {:lte lte :gte gte}}})
 
 (defmethod where :not-equals
   [field _ value]
-  (where field :equals value))
+  (where field "=" value))
 
 (defmethod where :in-set
   [field _ values]
   (let [field (str field ".keyword")]
-    {:term {(keyword field) values}}))
+    {:terms {(keyword field) values}}))

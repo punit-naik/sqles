@@ -11,11 +11,12 @@
 
 (defn clause->query-fn
   [clause]
-  (let [clause (str/lower-case clause)]
-    (get {"select" query/select
-          "where" query/where
-          "from" (fn [_])}
-         clause)))
+  (when clause
+    (let [clause (str/lower-case clause)]
+      (get {"select" query/select
+            "where" query/where
+            "from" (constantly nil)}
+           clause))))
 
 (defn find-index
   "Finds the index to be queried from the SQL query"
@@ -34,11 +35,12 @@
   [query-parts]
   (take-while #(not (clause->query-fn %)) query-parts))
 
-(defn clean-clause-data
+(defn hangle-select-clause-data
   "Cleans clause data by removing commas from fields
    For the `select` clause"
   [clause-data]
-  (mapcat (fn [cd] (filter seq (str/split cd #","))) clause-data))
+  (->> (mapcat (fn [cd] (filter seq (str/split cd #","))) clause-data)
+       (map str/trim)))
 
 (defn clean-query
   "Removes spaces before and after commas
@@ -60,10 +62,11 @@
         (let [clause (str/lower-case (first ps))
               select-clause? (= (str/lower-case clause) "select")
               where-clause? (= (str/lower-case clause) "where")
-              clause-data (cond-> (take-till-next-clause (rest ps))
-                            select-clause? clean-clause-data
+              clause-data (take-till-next-clause (rest ps))
+              remaining-parts (drop (count clause-data) (rest ps))
+              clause-data (cond-> clause-data
+                            select-clause? hangle-select-clause-data
                             where-clause? where/handle-where-clause-data)
-              intermediate-es-query ((clause->query-fn clause) clause-data)
-              remaining-parts (drop (count clause-data) (rest ps))]
+              intermediate-es-query ((clause->query-fn clause) clause-data)]
           (recur remaining-parts
                  (update result :body merge intermediate-es-query)))))))
