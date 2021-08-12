@@ -1,7 +1,9 @@
 (ns sqles.parse-sql
   (:require [clojure.string :as str]
             [sqles.query :as query]
-            [sqles.parse-sql.utils :refer [handle-clause-data]]))
+            [sqles.parse-sql.utils :refer [handle-clause-data]]
+            [sqles.parse-sql.where :as where]
+            [cheshire.core :as json]))
 
 (defn query->es-op
   [clause]
@@ -14,7 +16,7 @@
   (when clause
     (let [clause (str/lower-case clause)]
       (get {"select" query/select
-            "where" query/where
+            "where" query/where->es
             "from" (constantly nil)}
            clause))))
 
@@ -40,17 +42,26 @@
   (->> (mapcat (fn [cd] (filter seq (str/split cd #","))) clause-data)
        (map str/trim)))
 
+(defmethod handle-clause-data "where"
+  [_ clause-data]
+  (where/handle-clause-data clause-data))
+
 (defn clean-query
   "Removes spaces before and after commas
-   Won't match commas between quotes, single or double"
+   And spaces after opened round bracket and before closed round bracket
+   Won't match commas/round brackets between quotes, single or double"
   [query]
-  (str/replace query #"(?!\B\"[^(\"|\')]*)[\s+]?,(?![^(\"|\')]*(\"|\')\B)\s+" ","))
+  (-> (str/replace query #"(?!\B\"[^(\"|\'|\`)]*)[\s+]?,(?![^(\"|\'|\`)]*(\"|\'|\`)\B)\s+" ",")
+      (str/replace #"\((?![^(\"|\'|\`)]*(\"|\'|\`)\B)\s+" "(")
+      (str/replace #"(?!\B\"[^(\"|\'|\`)]*)[\s+]?\)" ")")
+      (str/replace #"NULL|null" "nil")))
 
 (defn parse-query
   [sql-query]
   (let [sql-query (clean-query sql-query)
         index (find-index sql-query)
-        parts (str/split sql-query #" ")]
+        parts (str/split sql-query
+                         #"\s+(?=[^\)\"\'\`]*([\(\"\'\`]|$))")]
     (loop [ps parts
            result {:url (str (query/from index)
                              (query->es-op (first parts)))
@@ -64,3 +75,10 @@
               intermediate-es-query ((clause->query-fn clause) clause-data)]
           (recur remaining-parts
                  (update result :body merge intermediate-es-query)))))))
+
+(comment
+  (-> (clean-query "select * from test-4 where a=1 and ( a!=2 or a!=3 ) and a=\"punit naik\"")
+      (str/split #"\s+(?=[^\)\"\'\`]*([\(\"\'\`]|$))"))
+  (-> (parse-query "select * from test-4 where id between (1,10) and name!=Bob-2")
+      json/generate-string
+      println))
