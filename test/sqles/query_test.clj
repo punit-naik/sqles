@@ -3,6 +3,10 @@
             [sqles.config :as config]
             [sqles.query :as query]))
 
+(deftest remove-quotes-test
+  (is (= "Bob" (query/remove-quotes "\"Bob\"")))
+  (is (= "Alice" (query/remove-quotes "'Alice'"))))
+
 (deftest select-test
   (is (= {:_source [:a]} (query/select "a")))
   (is (= {:_source [:a :b]} (query/select ["a" "b"])))
