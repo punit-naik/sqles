@@ -53,19 +53,19 @@
 
 (defmethod where :less-than
   [field _ value]
-  {:range {(keyword field) {:lt value}}})
+  {:range {(keyword field) {:lt (read-string value)}}})
 
 (defmethod where :less-than-or-equals
   [field _ value]
-  {:range {(keyword field) {:lte value}}})
+  {:range {(keyword field) {:lte (read-string value)}}})
 
 (defmethod where :greater-than
   [field _ value]
-  {:range {(keyword field) {:gt value}}})
+  {:range {(keyword field) {:gt (read-string value)}}})
 
 (defmethod where :greater-than-or-equals
   [field _ value]
-  {:range {(keyword field) {:gte value}}})
+  {:range {(keyword field) {:gte (read-string value)}}})
 
 (defmethod where :between-range-incl
   [field _ val-range]
@@ -78,7 +78,8 @@
 
 (defmethod where :in-set
   [field _ values]
-  (let [field (str field ".keyword")]
+  (let [field (str field ".keyword")
+        values (read-string values)]
     {:terms {(keyword field) values}}))
 
 (defn where->es

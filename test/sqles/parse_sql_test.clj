@@ -11,7 +11,7 @@
 
 (deftest clause->query-fn-test
   (is (= query/select (parse-sql/clause->query-fn "select")))
-  (is (= query/where (parse-sql/clause->query-fn "where")))
+  (is (= query/where->es (parse-sql/clause->query-fn "where")))
   (is (nil? ((parse-sql/clause->query-fn "from"))))
   (is (nil? (parse-sql/clause->query-fn nil))))
 

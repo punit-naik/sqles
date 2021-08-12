@@ -1,7 +1,8 @@
 (ns sqles.query-test
   (:require [clojure.test :refer [deftest is]]
             [sqles.config :as config]
-            [sqles.query :as query]))
+            [sqles.query :as query]
+            [sqles.parse-sql.where :as where]))
 
 (deftest remove-quotes-test
   (is (= "Bob" (query/remove-quotes "\"Bob\"")))
@@ -29,15 +30,16 @@
                      ">" (= op-key :greater-than)
                      "!=" (= op-key :not-equals)
                      false))
-                query/operators-used-without-spacing)
+                where/operators-used-without-spacing)
            (every? true?))))
 
 (deftest where-test
-  (is (= {:term {:a.keyword 1}} (query/where "a" "=" 1)))
-  (is (= {:range {:a {:lt 1}}} (query/where "a" "<" 1)))
-  (is (= {:range {:a {:gt 1}}} (query/where "a" ">" 1)))
-  (is (= {:range {:a {:lte 1}}} (query/where "a" "<=" 1)))
-  (is (= {:range {:a {:gte 1}}} (query/where "a" ">=" 1)))
-  (is (= {:term {:a.keyword 1}} (query/where "a" "!=" 1)))
-  (is (= {:terms {:a.keyword [1 2]}} (query/where "a" "in" [1 2])))
-  (is (= {:range {:a {:lte 1 :gte 3}}} (query/where "a" "between" [1 3]))))
+  (is (= {:range {:a {:lte 1, :gte 1}}} (query/where "a" "=" "1")))
+  (is (= {:term {:a.keyword "test"}} (query/where "a" "=" "test")))
+  (is (= {:range {:a {:lt 1}}} (query/where "a" "<" "1")))
+  (is (= {:range {:a {:gt 1}}} (query/where "a" ">" "1")))
+  (is (= {:range {:a {:lte 1}}} (query/where "a" "<=" "1")))
+  (is (= {:range {:a {:gte 1}}} (query/where "a" ">=" "1")))
+  (is (= {:term {:a.keyword "test"}} (query/where "a" "!=" "test")))
+  (is (= {:terms {:a.keyword [1 2]}} (query/where "a" "in" "(1, 2)")))
+  (is (= {:range {:a {:gte 1 :lte 3}}} (query/where "a" "between" "(1, 3)"))))
