@@ -69,7 +69,7 @@
                  (-> result
                      (dissoc :un-decided)
                      (update (keyword fcd) conj un-decided
-                             (let [next-clause-data (->> cd (drop 1))
+                             (let [next-clause-data (drop 1 cd)
                                    next-nested? (and (str/starts-with?
                                                       (first next-clause-data) "(")
                                                      (str/ends-with?

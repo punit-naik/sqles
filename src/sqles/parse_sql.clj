@@ -39,8 +39,10 @@
 
 (defmethod handle-clause-data "select"
   [_ clause-data]
-  (->> (mapcat (fn [cd] (filter seq (str/split cd #","))) clause-data)
-       (map str/trim)))
+  (map str/trim
+       (mapcat (fn [cd]
+                 (remove empty? (str/split cd #",")))
+               clause-data)))
 
 (defmethod handle-clause-data "where"
   [_ clause-data]
@@ -77,8 +79,8 @@
                  (update result :body merge intermediate-es-query)))))))
 
 (comment
-  (-> (clean-query "select * from test-4 where a=1 and ( a!=2 or a!=3 ) and a=\"punit naik\"")
-      (str/split #"\s+(?=[^\)\"\'\`]*([\(\"\'\`]|$))"))
+  (str/split (clean-query "select * from test-4 where a=1 and ( a!=2 or a!=3 ) and a=\"punit naik\"")
+             #"\s+(?=[^\)\"\'\`]*([\(\"\'\`]|$))")
   (-> (parse-query "select * from test-4 where id between (1,10) and name!=Bob-2")
       json/generate-string
       println))

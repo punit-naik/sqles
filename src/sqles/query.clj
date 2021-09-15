@@ -86,34 +86,40 @@
   "Converts SQL Where clauses into Elasticsearch boolean logic
    NOTE: Parsing of nested logical statements using brackets is not supported yet"
   [statements]
-  (-> {:query
-       {:bool
-        (cond-> {:must (map (fn [ands]
-                              (if (map? ands)
-                                (:query (where->es ands))
-                                (apply where ands)))
-                            (-> statements :and :true))
-                 :should (concat (map (fn [ors]
-                                        (if (map? ors)
-                                          (:query (where->es ors))
-                                          (apply where ors)))
-                                      (-> statements :or :true))
-                                 (map (fn [s]
-                                        {:bool {:must_not (if (map? s)
-                                                            (:query (where->es s))
-                                                            (apply where s))}})
-                                      (-> statements :or :false)))}
-          (seq (-> statements :and :false))
-          (merge {:must_not (map (fn [false-ands]
-                                   (if (map? false-ands)
-                                     (:query (where->es false-ands)) 
-                                     (apply where false-ands)))
-                                 (-> statements :and :false))}))}}
-      (update-in [:query :bool]
-                 (fn [{:keys [should must] :as m}]
-                   (cond-> m
-                     (empty? should) (dissoc :should)
-                     (empty? must) (dissoc :must))))))
+  (update-in
+   {:query
+    {:bool
+     (cond-> {:must
+              (map (fn [ands]
+                     (if (map? ands)
+                       (:query (where->es ands))
+                       (apply where ands)))
+                   (-> statements :and :true))
+              :should (concat
+                       (map (fn [ors]
+                              (if (map? ors)
+                                (:query (where->es ors))
+                                (apply where ors)))
+                            (-> statements :or :true))
+                       (map (fn [s]
+                              {:bool
+                               {:must_not (if (map? s)
+                                            (:query (where->es s))
+                                            (apply where s))}})
+                            (-> statements :or :false)))}
+
+       (seq (-> statements :and :false))
+       (merge {:must_not
+               (map (fn [false-ands]
+                      (if (map? false-ands)
+                        (:query (where->es false-ands))
+                        (apply where false-ands)))
+                    (-> statements :and :false))}))}}
+   [:query :bool]
+   (fn [{:keys [should must] :as m}]
+     (cond-> m
+       (empty? should) (dissoc :should)
+       (empty? must) (dissoc :must)))))
 
 (comment
   (where->es {:and {:true [["a" "=" "1"]
