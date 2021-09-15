@@ -43,3 +43,30 @@
   (is (= {:term {:a.keyword "test"}} (query/where "a" "!=" "test")))
   (is (= {:terms {:a.keyword [1 2]}} (query/where "a" "in" "(1, 2)")))
   (is (= {:range {:a {:gte 1 :lte 3}}} (query/where "a" "between" "(1, 3)"))))
+
+(deftest where->es-test
+  (is (= (query/where->es
+          {:and {:true [["a" "=" "1"]
+                        ["b" "=" "2"]]
+                 :false [["d" "!=" "4"]]}
+           :or {:true [["c" "=" "3"]] :false [["e" "!=" "5"]]}})
+         {:query
+          {:bool
+           {:must [{:range {:a {:lte 1, :gte 1}}}
+                   {:range {:b {:lte 2, :gte 2}}}]
+            :should [{:range {:c {:lte 3, :gte 3}}}
+                     {:bool {:must_not {:range {:e {:lte 5, :gte 5}}}}}]
+            :must_not [{:range {:d {:lte 4, :gte 4}}}]}}}))
+  (is (= (query/where->es
+          {:and
+           {:true [["a" "=" "1"]
+                   {:and {:true [], :false []}
+                    :or {:true [], :false [["b" "!=" "2"] ["c" "!=" "3"]]}}]
+            :false []}
+           :or {:true [], :false []}})
+         {:query
+          {:bool
+           {:must [{:range {:a {:lte 1, :gte 1}}}
+                   {:bool
+                    {:should [{:bool {:must_not {:range {:b {:lte 2, :gte 2}}}}}
+                              {:bool {:must_not {:range {:c {:lte 3, :gte 3}}}}}]}}]}}})))
