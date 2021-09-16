@@ -1,0 +1,245 @@
+<html>
+ <head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="../coverage.css"/>  <title> sqles/parse_sql.clj </title>
+ </head>
+ <body>
+<span class="covered" title="1 out of 1 forms covered">
+                001&nbsp;&nbsp;(ns&nbsp;sqles.parse-sql
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                002&nbsp;&nbsp;&nbsp;&nbsp;(:require&nbsp;[clojure.string&nbsp;:as&nbsp;str]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                003&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[sqles.query&nbsp;:as&nbsp;query]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                004&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[sqles.parse-sql.utils&nbsp;:refer&nbsp;[handle-clause-data]]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                005&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[sqles.parse-sql.where&nbsp;:as&nbsp;where]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                006&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[cheshire.core&nbsp;:as&nbsp;json]))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                007&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                008&nbsp;&nbsp;(defn&nbsp;query-&gt;es-op
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                009&nbsp;&nbsp;&nbsp;&nbsp;[clause]
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                010&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[clause&nbsp;(str&#x2F;lower-case&nbsp;clause)]
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                011&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(get&nbsp;{&quot;select&quot;&nbsp;&quot;&#x2F;_search&quot;}
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clause)))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                013&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                014&nbsp;&nbsp;(defn&nbsp;clause-&gt;query-fn
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                015&nbsp;&nbsp;&nbsp;&nbsp;[clause]
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                016&nbsp;&nbsp;&nbsp;&nbsp;(when&nbsp;clause
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[clause&nbsp;(str&#x2F;lower-case&nbsp;clause)]
+                </span><br/>
+<span class="covered" title="6 out of 6 forms covered">
+                018&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(get&nbsp;{&quot;select&quot;&nbsp;query&#x2F;select
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                019&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;where&quot;&nbsp;query&#x2F;where-&gt;es
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                020&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;from&quot;&nbsp;(constantly&nbsp;nil)}
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                021&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clause))))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                022&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                023&nbsp;&nbsp;(defn&nbsp;find-index
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                024&nbsp;&nbsp;&nbsp;&nbsp;&quot;Finds&nbsp;the&nbsp;index&nbsp;to&nbsp;be&nbsp;queried&nbsp;from&nbsp;the&nbsp;SQL&nbsp;query&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                025&nbsp;&nbsp;&nbsp;&nbsp;[sql-query]
+                </span><br/>
+<span class="covered" title="6 out of 6 forms covered">
+                026&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[parts&nbsp;(-&gt;&gt;&nbsp;(str&#x2F;split&nbsp;sql-query&nbsp;#&quot;&nbsp;&quot;)
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                027&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map-indexed&nbsp;vector)
+                </span><br/>
+<span class="covered" title="2 out of 2 forms covered">
+                028&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(into&nbsp;{}))
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                029&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from-clauses&nbsp;#{&quot;from&quot;&nbsp;&quot;FROM&quot;}]
+                </span><br/>
+<span class="covered" title="5 out of 5 forms covered">
+                030&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&gt;&nbsp;(filter&nbsp;(fn&nbsp;[[k&nbsp;_]]
+                </span><br/>
+<span class="covered" title="8 out of 8 forms covered">
+                031&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(contains?&nbsp;from-clauses&nbsp;(get&nbsp;parts&nbsp;(dec&nbsp;k))))&nbsp;parts)
+                </span><br/>
+<span class="covered" title="2 out of 2 forms covered">
+                032&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vals&nbsp;first)))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                033&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                034&nbsp;&nbsp;(defn&nbsp;take-till-next-clause
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                035&nbsp;&nbsp;&nbsp;&nbsp;&quot;Gets&nbsp;the&nbsp;data&nbsp;for&nbsp;a&nbsp;particular&nbsp;clause&nbsp;from&nbsp;query&nbsp;parts
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Till&nbsp;the&nbsp;next&nbsp;clause&nbsp;is&nbsp;found&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                037&nbsp;&nbsp;&nbsp;&nbsp;[query-parts]
+                </span><br/>
+<span class="covered" title="9 out of 9 forms covered">
+                038&nbsp;&nbsp;&nbsp;&nbsp;(take-while&nbsp;#(not&nbsp;(clause-&gt;query-fn&nbsp;%))&nbsp;query-parts))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                039&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                040&nbsp;&nbsp;(defmethod&nbsp;handle-clause-data&nbsp;&quot;select&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                041&nbsp;&nbsp;&nbsp;&nbsp;[_&nbsp;clause-data]
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                042&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;str&#x2F;trim
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                043&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(mapcat&nbsp;(fn&nbsp;[cd]
+                </span><br/>
+<span class="covered" title="7 out of 7 forms covered">
+                044&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(remove&nbsp;empty?&nbsp;(str&#x2F;split&nbsp;cd&nbsp;#&quot;,&quot;)))
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                045&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clause-data)))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                046&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                047&nbsp;&nbsp;(defmethod&nbsp;handle-clause-data&nbsp;&quot;where&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                048&nbsp;&nbsp;&nbsp;&nbsp;[_&nbsp;clause-data]
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                049&nbsp;&nbsp;&nbsp;&nbsp;(where&#x2F;handle-clause-data&nbsp;clause-data))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                050&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                051&nbsp;&nbsp;(defn&nbsp;clean-query
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                052&nbsp;&nbsp;&nbsp;&nbsp;&quot;Removes&nbsp;spaces&nbsp;before&nbsp;and&nbsp;after&nbsp;commas
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                053&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;spaces&nbsp;after&nbsp;opened&nbsp;round&nbsp;bracket&nbsp;and&nbsp;before&nbsp;closed&nbsp;round&nbsp;bracket
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                054&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Won&#x27;t&nbsp;match&nbsp;commas&#x2F;round&nbsp;brackets&nbsp;between&nbsp;quotes,&nbsp;single&nbsp;or&nbsp;double&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                055&nbsp;&nbsp;&nbsp;&nbsp;[query]
+                </span><br/>
+<span class="covered" title="8 out of 8 forms covered">
+                056&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;(str&#x2F;replace&nbsp;query&nbsp;#&quot;(?!\B\&quot;[^(\&quot;|\&#x27;|\`)]*)[\s+]?,(?![^(\&quot;|\&#x27;|\`)]*(\&quot;|\&#x27;|\`)\B)\s+&quot;&nbsp;&quot;,&quot;)
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                057&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&#x2F;replace&nbsp;#&quot;\((?![^(\&quot;|\&#x27;|\`)]*(\&quot;|\&#x27;|\`)\B)\s+&quot;&nbsp;&quot;(&quot;)
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                058&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&#x2F;replace&nbsp;#&quot;(?!\B\&quot;[^(\&quot;|\&#x27;|\`)]*)[\s+]?\)&quot;&nbsp;&quot;)&quot;)
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                059&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&#x2F;replace&nbsp;#&quot;NULL|null&quot;&nbsp;&quot;nil&quot;)))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                060&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                061&nbsp;&nbsp;(defn&nbsp;parse-query
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                062&nbsp;&nbsp;&nbsp;&nbsp;[sql-query]
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                063&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[sql-query&nbsp;(clean-query&nbsp;sql-query)
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                064&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index&nbsp;(find-index&nbsp;sql-query)
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                065&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parts&nbsp;(str&#x2F;split&nbsp;sql-query
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                066&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&quot;\s+(?=[^\)\&quot;\&#x27;\`]*([\(\&quot;\&#x27;\`]|$))&quot;)]
+                </span><br/>
+<span class="covered" title="2 out of 2 forms covered">
+                067&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(loop&nbsp;[ps&nbsp;parts
+                </span><br/>
+<span class="covered" title="8 out of 8 forms covered">
+                068&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;{:url&nbsp;(str&nbsp;(query&#x2F;from&nbsp;index)
+                </span><br/>
+<span class="covered" title="5 out of 5 forms covered">
+                069&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(query-&gt;es-op&nbsp;(first&nbsp;parts)))
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                070&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:body&nbsp;{}}]
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                071&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(empty?&nbsp;ps)
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                072&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result
+                </span><br/>
+<span class="covered" title="6 out of 6 forms covered">
+                073&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[clause&nbsp;(str&#x2F;lower-case&nbsp;(first&nbsp;ps))
+                </span><br/>
+<span class="covered" title="5 out of 5 forms covered">
+                074&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clause-data&nbsp;(take-till-next-clause&nbsp;(rest&nbsp;ps))
+                </span><br/>
+<span class="covered" title="7 out of 7 forms covered">
+                075&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;remaining-parts&nbsp;(drop&nbsp;(count&nbsp;clause-data)&nbsp;(rest&nbsp;ps))
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                076&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clause-data&nbsp;(handle-clause-data&nbsp;clause&nbsp;clause-data)
+                </span><br/>
+<span class="covered" title="5 out of 5 forms covered">
+                077&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intermediate-es-query&nbsp;((clause-&gt;query-fn&nbsp;clause)&nbsp;clause-data)]
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                078&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(recur&nbsp;remaining-parts
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                079&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(update&nbsp;result&nbsp;:body&nbsp;merge&nbsp;intermediate-es-query)))))))
+                </span><br/>
+ </body>
+</html>
