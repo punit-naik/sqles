@@ -8,12 +8,16 @@ A Clojure library designed to convert SQL statements into Elasticsearch requests
 
 ### Test
 ```
-lein with-profiles +es-dev cloverage
+lein with-profiles +es-dev test
 ```
 
 ## Docs
 
 [API Docs](https://punit-naik.github.io/sqles)
+
+### Code Coverage
+
+[Code Coverage Report](https://punit-naik.github.io/sqles/coverage)
 
 ## License
 
