@@ -120,16 +120,3 @@
      (cond-> m
        (empty? should) (dissoc :should)
        (empty? must) (dissoc :must)))))
-
-(comment
-  (where->es {:and {:true [["a" "=" "1"]
-                           ["b" "=" "2"]]
-                    :false [["d" "!=" "4"]]}
-              :or {:true [["c" "=" "3"]] :false [["e" "!=" "5"]]}})
-  (where->es
-   {:and
-    {:true [["a" "=" "1"]
-            {:and {:true [], :false []}
-             :or {:true [], :false [["b" "!=" "2"] ["c" "!=" "3"]]}}]
-     :false []}
-    :or {:true [], :false []}}))

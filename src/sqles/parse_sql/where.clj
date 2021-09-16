@@ -18,7 +18,8 @@
   [statement]
   (when-let [matched-op (some #(and (str/includes? statement %) %)
                               operators-used-without-spacing)]
-    (when-not (re-matches (re-pattern (str "\\s+\\" matched-op "\\s+")) statement)
+    (when-not (re-matches (re-pattern (str ".*\\s+\\" matched-op "\\s+.*"))
+                          statement)
       matched-op)))
 
 (defn separate-operands
@@ -100,7 +101,3 @@
        (map (fn [[k statements]]
               [k (separate-nots statements)]))
        (into {})))
-
-(comment
-  (handle-clause-data ["a=1" "and" "(b!=2 or c!=3)"])
-  (handle-clause-data ["a=1" "and" "b=2" "or" "c=3" "and" "d!=4" "or" "e" "=" "5"]))

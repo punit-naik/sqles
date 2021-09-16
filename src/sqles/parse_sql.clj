@@ -77,10 +77,3 @@
               intermediate-es-query ((clause->query-fn clause) clause-data)]
           (recur remaining-parts
                  (update result :body merge intermediate-es-query)))))))
-
-(comment
-  (str/split (clean-query "select * from test-4 where a=1 and ( a!=2 or a!=3 ) and a=\"punit naik\"")
-             #"\s+(?=[^\)\"\'\`]*([\(\"\'\`]|$))")
-  (-> (parse-query "select * from test-4 where id between (1,10) and name!=Bob-2")
-      json/generate-string
-      println))
