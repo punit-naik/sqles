@@ -63,7 +63,7 @@
   (let [sql-query (clean-query sql-query)
         index (find-index sql-query)
         parts (str/split sql-query
-                         #"\s+(?=[^\)\"\'\`]*([\(\"\'\`]|$))")]
+                         #"\s+(?=([^\"\'\`]*[\"|\'|\`][^\"\'\`]*[\"|\'|\`])*[^\"\'\`]*$)")]
     (loop [ps parts
            result {:url (str (query/from index)
                              (query->es-op (first parts)))
