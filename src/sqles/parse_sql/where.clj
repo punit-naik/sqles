@@ -56,16 +56,21 @@
   (loop [cd clause-data
          {:keys [un-decided] :as result} {:and [] :or []}]
     (if (empty? cd)
-      (let [remove-nil-fn (partial remove nil?)]
-        (cond-> (-> result
-                    (update :and remove-nil-fn)
-                    (update :or remove-nil-fn))
-          un-decided (update :and conj un-decided)
-          un-decided (dissoc :un-decided)))
+      (let [remove-nil-fn (partial remove nil?)
+            final-result (cond-> (-> result
+                                     (update :and remove-nil-fn)
+                                     (update :or remove-nil-fn))
+                           un-decided (update :and conj un-decided)
+                           un-decided (dissoc :un-decided))]
+        final-result)
       (let [fcd (-> cd first str/lower-case)
             logical? (or (= "and" fcd) (= "or" fcd))
-            nested? (and (str/starts-with? fcd "(") (str/ends-with? fcd ")"))]
-        (recur (drop (if nested? 1 (if logical? 4 3)) cd)
+            nested? (and (str/starts-with? fcd "(") (str/ends-with? fcd ")"))
+            not? (if (= (try (nth cd (if logical? 2 1))
+                             (catch IndexOutOfBoundsException _ ""))
+                        "not")
+                   1 0)]
+        (recur (drop (+ (if nested? 1 (if logical? 4 3)) not?) cd)
                (if logical?
                  (-> result
                      (dissoc :un-decided)
@@ -75,12 +80,12 @@
                                                       (first next-clause-data) "(")
                                                      (str/ends-with?
                                                       (first next-clause-data) ")"))
-                                   next-clause-data (take (if next-nested? 1 3) next-clause-data)]
+                                   next-clause-data (take (+ (if next-nested? 1 3) not?) next-clause-data)]
                                (cond-> next-clause-data
                                  next-nested? nested-handle-clause-data))))
                  (assoc result :un-decided (if nested?
                                              nested-handle-clause-data
-                                             (take 3 cd)))))))))
+                                             (take (+ 3 not?) cd)))))))))
 
 (defn separate-nots
   "Separates normal (true) `not` (false) statements from a list"
@@ -89,9 +94,11 @@
                     (if (map? s)
                       false
                       (let [[_ op _] s]
-                        (= op "!="))))]
+                        (or (= op "!=")
+                            (= op "not")))))]
     {:true (remove predicate statements)
-     :false (filter predicate statements)}))
+     :false (->> (filter predicate statements)
+                 (map (fn [s] (remove #(= % "not") s))))}))
 
 (defn handle-clause-data
   [clause-data]
