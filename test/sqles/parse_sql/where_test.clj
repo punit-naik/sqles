@@ -47,7 +47,11 @@
            ["c" "=" "3"]
            ["d" "!=" "4"]])
          {:true [["a" "=" "1"] ["c" "=" "3"]]
-          :false [["b" "!=" "2"] ["d" "!=" "4"]]})))
+          :false [["b" "!=" "2"] ["d" "!=" "4"]]}))
+  (is (= (where/separate-nots
+          [["a" "=" "1"]
+           ["b" "not" "in" "(1, 2, 3)"]])
+         {:true [["a" "=" "1"]] :false [["b" "in" "(1, 2, 3)"]]})))
 
 (deftest handle-clause-data-test
   (is (= (where/handle-clause-data ["a=1" "and" "(b!=2 or c!=3)"])

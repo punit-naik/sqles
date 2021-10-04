@@ -41,6 +41,7 @@
   (is (= {:range {:a {:lte 1}}} (query/where "a" "<=" "1")))
   (is (= {:range {:a {:gte 1}}} (query/where "a" ">=" "1")))
   (is (= {:term {:a.keyword "test"}} (query/where "a" "!=" "test")))
+  (is (= {:term {:a.keyword "test"}} (query/where "a" "<>" "test")))
   (is (= {:terms {:a.keyword [1 2]}} (query/where "a" "in" "(1, 2)")))
   (is (= {:range {:a {:gte 1 :lte 3}}} (query/where "a" "between" "(1, 3)"))))
 
