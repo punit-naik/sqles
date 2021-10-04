@@ -28,6 +28,7 @@
         ">" :greater-than
         ">=" :greater-than-or-equals
         "!=" :not-equals
+        "<>" :not-equals
         "in" :in-set
         "between" :between-range-incl}
        op))
