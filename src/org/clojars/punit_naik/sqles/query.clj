@@ -1,5 +1,5 @@
-(ns sqles.query
-  (:require [sqles.config :as config]
+(ns org.clojars.punit-naik.sqles.query
+  (:require [org.clojars.punit-naik.sqles.config :as config]
             [clojure.string :as str]))
 
 (defn remove-quotes

@@ -1,4 +1,4 @@
-(ns sqles.config
+(ns org.clojars.punit-naik.sqles.config
   (:require [omniconf.core :as cfg]
             [clojure.string :as str]
             [clj-http.client :as client]

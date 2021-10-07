@@ -1,8 +1,8 @@
-(ns sqles.query-test
+(ns org.clojars.punit-naik.sqles.query-test
   (:require [clojure.test :refer [deftest is]]
-            [sqles.config :as config]
-            [sqles.query :as query]
-            [sqles.parse-sql.where :as where]))
+            [org.clojars.punit-naik.sqles.config :as config]
+            [org.clojars.punit-naik.sqles.query :as query]
+            [org.clojars.punit-naik.sqles.parse-sql.where :as where]))
 
 (deftest remove-quotes-test
   (is (= "Bob" (query/remove-quotes "\"Bob\"")))

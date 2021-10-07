@@ -1,6 +1,6 @@
-(ns sqles.config-test
+(ns org.clojars.punit-naik.sqles.config-test
   (:require [clojure.test :refer [deftest testing is]]
-            [sqles.config :as config]
+            [org.clojars.punit-naik.sqles.config :as config]
             [omniconf.core :as cfg]
             [clj-http.client :as client]))
 

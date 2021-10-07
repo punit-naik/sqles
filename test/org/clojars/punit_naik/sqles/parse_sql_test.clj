@@ -1,9 +1,9 @@
-(ns sqles.parse-sql-test
+(ns org.clojars.punit-naik.sqles.parse-sql-test
   (:require [clojure.test :refer [deftest is]]
-            [sqles.config :as config]
-            [sqles.parse-sql :as parse-sql]
-            [sqles.query :as query]
-            [sqles.parse-sql.utils :as utils]))
+            [org.clojars.punit-naik.sqles.config :as config]
+            [org.clojars.punit-naik.sqles.parse-sql :as parse-sql]
+            [org.clojars.punit-naik.sqles.query :as query]
+            [org.clojars.punit-naik.sqles.parse-sql.utils :as utils]))
 
 (deftest query->es-op-test
   (is (= "/_search" (parse-sql/query->es-op "select")))

@@ -1,6 +1,6 @@
-(ns sqles.parse-sql.where-test
+(ns org.clojars.punit-naik.sqles.parse-sql.where-test
   (:require [clojure.test :refer [deftest is]]
-            [sqles.parse-sql.where :as where]))
+            [org.clojars.punit-naik.sqles.parse-sql.where :as where]))
 
 (deftest un-separated-operands?-test
   (is (= (where/un-separated-operands? "a=1") "="))

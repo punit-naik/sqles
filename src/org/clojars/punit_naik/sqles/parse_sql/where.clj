@@ -1,4 +1,4 @@
-(ns sqles.parse-sql.where
+(ns org.clojars.punit-naik.sqles.parse-sql.where
   (:require [clojure.string :as str]))
 
 (def operators-used-without-spacing
