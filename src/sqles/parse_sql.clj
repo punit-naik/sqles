@@ -2,8 +2,7 @@
   (:require [clojure.string :as str]
             [sqles.query :as query]
             [sqles.parse-sql.utils :refer [handle-clause-data]]
-            [sqles.parse-sql.where :as where]
-            [cheshire.core :as json]))
+            [sqles.parse-sql.where :as where]))
 
 (defn query->es-op
   [clause]
