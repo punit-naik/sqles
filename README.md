@@ -3,6 +3,7 @@
 A Clojure library designed to convert SQL statements into Elasticsearch requests
 
 [![CircleCI](https://circleci.com/gh/punit-naik/sqles/tree/master.svg?style=svg)](https://circleci.com/gh/punit-naik/sqles/tree/master)
+[![Clojars Project](https://img.shields.io/clojars/v/org.clojars.punit-naik/sqles.svg)](https://clojars.org/org.clojars.punit-naik/sqles)
 
 ## Usage
 
