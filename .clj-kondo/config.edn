@@ -1,1 +1,1 @@
-{:lint-as {sqles.config/when-let-multiple clojure.core/let}}
+{:lint-as {org.clojars.punit-naik.sqles.config/when-let-multiple clojure.core/let}}
