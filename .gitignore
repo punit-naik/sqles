@@ -10,7 +10,12 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
-/.calva
+/.calvas
 /.lsp
 /.clj-kondo/.cache
 .eastwood
+.project
+.classpath
+*.prefs
+.vscode
+output.calva-repl
