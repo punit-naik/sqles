@@ -41,17 +41,21 @@
   (with-redefs [config/generate-server-url-from-config (constantly "http://localhost:9200/")
                 config/server-up? (constantly true)]
     (is (= {:url "http://localhost:9200/test-1/_search"
-            :body {:_source [:a :b]}}
+            :body {:_source [:a :b]}
+            :method :post}
            (parse-sql/parse-query "select a , b from test-1")))
     (is (= {:url "http://localhost:9200/test-1/_search"
-            :body {:_source [:a :b :c]}}
+            :body {:_source [:a :b :c]}
+            :method :post}
            (parse-sql/parse-query "select a , b,c from test-1")))
     (is (= {:url "http://localhost:9200/test-1/_search"
-            :body {}}
+            :body {}
+            :method :post}
            (parse-sql/parse-query "select * from test-1")))
     (is (= {:url "http://localhost:9200/test-4/_search"
             :body {:query {:bool {:must [{:range {:id {:lte 10, :gte 1}}}]
-                                  :must_not [{:term {:name.keyword "Bob-2"}}]}}}}
+                                  :must_not [{:term {:name.keyword "Bob-2"}}]}}}
+            :method :post}
            (parse-sql/parse-query "select * from test-4 where id between (1,10) and name!=Bob-2")))
     ;; TODO: Need to add more complex queries
     ))
