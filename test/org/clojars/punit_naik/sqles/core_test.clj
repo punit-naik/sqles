@@ -9,10 +9,11 @@
            {:keys [tagline]
             {:keys [number]} :version} :body}
           (core/run-query {:url (config/es-server)})]
-      (is (pos-int? status))
-      (if (and (not (nil? status)) (= status 200))
-        (is (re-matches #"\d+\.\d+\.\d+" number))
-        (is (= tagline "You Know, for Search"))))
+      (when status
+        (is (pos-int? status))
+        (if (= status 200)
+          (is (re-matches #"\d+\.\d+\.\d+" number))
+          (is (= tagline "You Know, for Search")))))
     (let [{:keys [status] {error-msg :error} :body} (core/run-query {:url "http://localhost:9200" :method :post})]
       (if (and (not (nil? status)) (= status 405))
         (is (= status 405))
