@@ -1,7 +1,7 @@
 (ns org.clojars.punit-naik.sqles.config
   (:require [omniconf.core :as cfg]
             [clojure.string :as str]
-            [clj-http.client :as client]
+            [clj-http.client :as http]
             [cheshire.core :as json]))
 
 (defmacro when-let-multiple
@@ -44,16 +44,16 @@
 (defn ping-server
   [server]
   (try (let [server-url (str (add-trailing-backslash server) "_cluster/health")
-             {:keys [body status]} (client/get server-url {:accept :json})]
+             {:keys [body status]} (http/get server-url {:accept :json})]
          {:body (json/parse-string body true)
           :status status})
        (catch Exception _ {:status 405})))
 
 (defn server-up?
   [server]
-  (let [{:keys [status] {:keys [active_shards]} :body} (ping-server server)]
+  (let [{:keys [status] {:keys [number_of_nodes]} :body} (ping-server server)]
     (and (= status 200)
-         (>= active_shards 1))))
+         (>= number_of_nodes 1))))
 
 (defn generate-server-url-from-config
   []
