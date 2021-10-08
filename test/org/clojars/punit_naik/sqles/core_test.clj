@@ -3,8 +3,8 @@
             [org.clojars.punit-naik.sqles.config :as config]
             [org.clojars.punit-naik.sqles.core :as core]))
 
-(deftest init-test
-  (testing "Init test, passing"
+(deftest run-query-test
+  (testing "`run-query` fn tests"
     (let [{:keys [status]
            {:keys [tagline]
             {:keys [number]} :version} :body}
@@ -12,4 +12,11 @@
       (is (pos-int? status))
       (if (= status 200)
         (is (re-matches #"\d+\.\d+\.\d+" number))
-        (is (= tagline "You Know, for Search"))))))
+        (is (= tagline "You Know, for Search"))))
+    (let [{:keys [status] {error-msg :error} :body} (core/run-query {:url "http://localhost:9200" :method :post})]
+      (is (= status 405))
+      (is (= error-msg "Incorrect HTTP method for uri [/] and method [POST], allowed: [GET, HEAD, DELETE]")))
+    (is (= (core/run-query {:url "http://xyz.pqr"}) {}))
+    (is (= (core/run-query {:url "http://localhost:9300"}) {}))
+    (is (= (core/run-query {:url "http://localhost:9122"}) {}))
+    (is (= (core/run-query {:url "http://localhost:9123123123"}) {}))))
