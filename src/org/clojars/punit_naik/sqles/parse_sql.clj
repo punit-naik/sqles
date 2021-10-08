@@ -66,7 +66,8 @@
     (loop [ps parts
            result {:url (str (query/from index)
                              (query->es-op (first parts)))
-                   :body {}}]
+                   :body {}
+                   :method :post}]
       (if (empty? ps)
         result
         (let [clause (str/lower-case (first ps))
