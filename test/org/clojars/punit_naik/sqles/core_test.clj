@@ -11,11 +11,11 @@
           (core/run-query {:url (config/es-server)})]
       (when status
         (is (pos-int? status))
-        (if (= status 200)
+        (when (= status 200)
           (is (re-matches #"\d+\.\d+\.\d+" number))
           (is (= tagline "You Know, for Search")))))
     (let [{:keys [status] {error-msg :error} :body} (core/run-query {:url "http://localhost:9200" :method :post})]
-      (if (and (not (nil? status)) (= status 405))
+      (when (and (not (nil? status)) (= status 405))
         (is (= status 405))
         (is (= error-msg "Incorrect HTTP method for uri [/] and method [POST], allowed: [GET, HEAD, DELETE]"))))
     (is (= (core/run-query {:url "http://xyz.pqr"}) {}))
