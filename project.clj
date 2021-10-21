@@ -1,4 +1,4 @@
-(defproject org.clojars.punit-naik/sqles "1.0.0"
+(defproject org.clojars.punit-naik/sqles "1.0.1"
   :description "A Clojure library designed to convert SQL statements into Elasticsearch queries"
   :url "https://github.com/punit-naik/sqles.git"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
