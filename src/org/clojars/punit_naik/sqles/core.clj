@@ -1,6 +1,8 @@
 (ns org.clojars.punit-naik.sqles.core
   (:require [cheshire.core :as json]
-            [clj-http.client :as http])
+            [clj-http.client :as http]
+            [clojure.string :as str]
+            [org.clojars.punit-naik.sqles.parse-sql :as sql])
   (:import [clojure.lang ExceptionInfo]
            [java.lang IllegalArgumentException]
            [java.net UnknownHostException]
@@ -58,4 +60,4 @@
 
 (defn -main
   [& args]
-  (println "No Op"))
+  (run-query (sql/parse-query (str/join " " args))))
