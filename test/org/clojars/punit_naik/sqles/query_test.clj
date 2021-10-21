@@ -11,8 +11,10 @@
 (deftest select-test
   (is (= {:_source [:a]} (query/select "a")))
   (is (= {:_source [:a :b]} (query/select ["a" "b"])))
-  (is (nil? (query/select "*")))
-  (is (nil? (query/select ["*"]))))
+  (is (= {:query {:match_all {}}} (query/select ["*"]))))
+
+(deftest limit-test
+  (is (= {:size "10"} (query/limit "10"))))
 
 (deftest from-test
   (with-redefs [config/generate-server-url-from-config (constantly "http://localhost:9200/")
