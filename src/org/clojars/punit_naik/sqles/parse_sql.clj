@@ -16,7 +16,8 @@
     (let [clause (str/lower-case clause)]
       (get {"select" query/select
             "where" query/where->es
-            "from" (constantly nil)}
+            "from" (constantly nil)
+            "limit" query/limit}
            clause))))
 
 (defn find-index
@@ -46,6 +47,10 @@
 (defmethod handle-clause-data "where"
   [_ clause-data]
   (where/handle-clause-data clause-data))
+
+(defmethod handle-clause-data "limit"
+  [_ [limit]]
+  limit)
 
 (defn clean-query
   "Removes spaces before and after commas
