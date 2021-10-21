@@ -11,6 +11,7 @@
 
 (deftest clause->query-fn-test
   (is (= query/select (parse-sql/clause->query-fn "select")))
+  (is (= query/limit (parse-sql/clause->query-fn "limit")))
   (is (= query/where->es (parse-sql/clause->query-fn "where")))
   (is (nil? ((parse-sql/clause->query-fn "from"))))
   (is (nil? (parse-sql/clause->query-fn nil))))
@@ -28,7 +29,14 @@
   (is (= ["a" "b" "c"] (utils/handle-clause-data "select" ["a," "b ," "c"])))
   (is (= ["a" "b" "c"] (utils/handle-clause-data "select" [" a," "b ," "c"])))
   (is (= ["a" "b" "c"] (utils/handle-clause-data "select" ["a, b, c"])))
-  (is (= ["a" "b" "c"] (utils/handle-clause-data "select" ["a , b , c"]))))
+  (is (= ["a" "b" "c"] (utils/handle-clause-data "select" ["a , b , c"])))
+  (is (= {:and {:true [["a" "=" "\"A, a\""]], :false []},
+          :or {:true [], :false []}}
+         (utils/handle-clause-data "where"  ["a=\"A, a\""])))
+  (is (= {:and {:true [["x" "=" "1"]], :false []},
+          :or {:true [], :false []}}
+         (utils/handle-clause-data "where" ["x" "=" "1"])))
+  (is (= "10" (utils/handle-clause-data "limit" ["10"]))))
 
 (deftest clean-query-test
   (is (= "select a,b,c from test-1" (parse-sql/clean-query "select a, b, c from test-1")))
@@ -49,7 +57,7 @@
             :method :post}
            (parse-sql/parse-query "select a , b,c from test-1")))
     (is (= {:url "http://localhost:9200/test-1/_search"
-            :body {}
+            :body {:query {:match_all {}}}
             :method :post}
            (parse-sql/parse-query "select * from test-1")))
     (is (= {:url "http://localhost:9200/test-4/_search"
