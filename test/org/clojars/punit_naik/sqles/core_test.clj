@@ -1,5 +1,6 @@
 (ns org.clojars.punit-naik.sqles.core-test
-  (:require [clojure.test :refer [deftest testing is]]
+  (:require [clojure.string :as str]
+            [clojure.test :refer [deftest testing is]]
             [org.clojars.punit-naik.sqles.config :as config]
             [org.clojars.punit-naik.sqles.core :as core]))
 
@@ -17,7 +18,7 @@
     (let [{:keys [status] {error-msg :error} :body} (core/run-query {:url "http://localhost:9200" :method :post})]
       (when (and (not (nil? status)) (= status 405))
         (is (= status 405))
-        (is (= error-msg "Incorrect HTTP method for uri [/] and method [POST], allowed: [GET, HEAD, DELETE]"))))
+        (is (str/starts-with? error-msg "Incorrect HTTP method for uri [/] and method [POST], allowed: "))))
     (is (= (core/run-query {:url "http://xyz.pqr"}) {}))
     (is (= (core/run-query {:url "http://localhost:9300"}) {}))
     (is (= (core/run-query {:url "http://localhost:9122"}) {}))
