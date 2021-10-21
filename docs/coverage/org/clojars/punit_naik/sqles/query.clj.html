@@ -35,343 +35,364 @@
                 010&nbsp;&nbsp;(defn&nbsp;select
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                011&nbsp;&nbsp;&nbsp;&nbsp;[fields]
+                011&nbsp;&nbsp;&nbsp;&nbsp;[[first-field&nbsp;:as&nbsp;fields]]
+                </span><br/>
+<span class="covered" title="13 out of 13 forms covered">
+                012&nbsp;&nbsp;&nbsp;&nbsp;(if-not&nbsp;(and&nbsp;(=&nbsp;(count&nbsp;fields)&nbsp;1)
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                013&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(=&nbsp;first-field&nbsp;&quot;*&quot;))
                 </span><br/>
 <span class="covered" title="8 out of 8 forms covered">
-                012&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[fields&nbsp;(if&nbsp;(coll?&nbsp;fields)&nbsp;fields&nbsp;[fields])]
+                014&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[fields&nbsp;(if&nbsp;(coll?&nbsp;fields)&nbsp;fields&nbsp;[fields])]
                 </span><br/>
-<span class="covered" title="5 out of 5 forms covered">
-                013&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(when-not&nbsp;(seq
+<span class="partial" title="4 out of 5 forms covered">
+                015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(when-not&nbsp;(seq
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                014&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(some&nbsp;(fn&nbsp;[field]
+                016&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(some&nbsp;(fn&nbsp;[field]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(re-matches&nbsp;#&quot;.*\*&quot;&nbsp;field))
+                017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(re-matches&nbsp;#&quot;.*\*&quot;&nbsp;field))
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                016&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fields))
+                018&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fields))
                 </span><br/>
 <span class="covered" title="6 out of 6 forms covered">
-                017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:_source&nbsp;(map&nbsp;keyword&nbsp;fields)})))
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                018&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                019&nbsp;&nbsp;(defn&nbsp;from
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                020&nbsp;&nbsp;&nbsp;&nbsp;[table]
+                019&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:_source&nbsp;(map&nbsp;keyword&nbsp;fields)}))
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                021&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;(config&#x2F;es-server)&nbsp;table))
+                020&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:query&nbsp;{:match_all&nbsp;{}}}))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                022&nbsp;&nbsp;
+                021&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                023&nbsp;&nbsp;(defn&nbsp;op-&gt;op-key
+                022&nbsp;&nbsp;(defn&nbsp;limit
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                024&nbsp;&nbsp;&nbsp;&nbsp;[op]
+                023&nbsp;&nbsp;&nbsp;&nbsp;[n]
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                024&nbsp;&nbsp;&nbsp;&nbsp;{:size&nbsp;n})
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                025&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                026&nbsp;&nbsp;(defn&nbsp;from
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                027&nbsp;&nbsp;&nbsp;&nbsp;[table]
+                </span><br/>
+<span class="covered" title="5 out of 5 forms covered">
+                028&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;(config&#x2F;es-server)&nbsp;table))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                029&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                030&nbsp;&nbsp;(defn&nbsp;op-&gt;op-key
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                031&nbsp;&nbsp;&nbsp;&nbsp;[op]
                 </span><br/>
 <span class="covered" title="20 out of 20 forms covered">
-                025&nbsp;&nbsp;&nbsp;&nbsp;(get&nbsp;{&quot;=&quot;&nbsp;:equals
+                032&nbsp;&nbsp;&nbsp;&nbsp;(get&nbsp;{&quot;=&quot;&nbsp;:equals
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                026&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;&quot;&nbsp;:less-than
+                033&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;&quot;&nbsp;:less-than
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                027&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;=&quot;&nbsp;:less-than-or-equals
+                034&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;=&quot;&nbsp;:less-than-or-equals
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                028&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&gt;&quot;&nbsp;:greater-than
+                035&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&gt;&quot;&nbsp;:greater-than
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                029&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&gt;=&quot;&nbsp;:greater-than-or-equals
+                036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&gt;=&quot;&nbsp;:greater-than-or-equals
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                030&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;!=&quot;&nbsp;:not-equals
+                037&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;!=&quot;&nbsp;:not-equals
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                031&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;&gt;&quot;&nbsp;:not-equals
+                038&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&lt;&gt;&quot;&nbsp;:not-equals
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                032&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;in&quot;&nbsp;:in-set
+                039&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;in&quot;&nbsp;:in-set
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                033&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;between&quot;&nbsp;:between-range-incl}
+                040&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;between&quot;&nbsp;:between-range-incl}
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                034&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;op))
+                041&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;op))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                035&nbsp;&nbsp;
+                042&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                036&nbsp;&nbsp;(defn&nbsp;term-query
+                043&nbsp;&nbsp;(defn&nbsp;term-query
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                037&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;value]
+                044&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;value]
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                038&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[field&nbsp;(str&nbsp;field&nbsp;&quot;.keyword&quot;)
+                045&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[field&nbsp;(str&nbsp;field&nbsp;&quot;.keyword&quot;)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                039&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;(remove-quotes&nbsp;value)]
+                046&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;(remove-quotes&nbsp;value)]
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                040&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:term&nbsp;{(keyword&nbsp;field)&nbsp;value}}))
+                047&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:term&nbsp;{(keyword&nbsp;field)&nbsp;value}}))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                041&nbsp;&nbsp;
+                048&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                042&nbsp;&nbsp;(defmulti&nbsp;where
+                049&nbsp;&nbsp;(defmulti&nbsp;where
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                043&nbsp;&nbsp;&nbsp;&nbsp;(fn&nbsp;[_&nbsp;op&nbsp;_]&nbsp;(op-&gt;op-key&nbsp;op)))
+                050&nbsp;&nbsp;&nbsp;&nbsp;(fn&nbsp;[_&nbsp;op&nbsp;_]&nbsp;(op-&gt;op-key&nbsp;op)))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                044&nbsp;&nbsp;
+                051&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                045&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:equals
+                052&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:equals
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                046&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
+                053&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                047&nbsp;&nbsp;&nbsp;&nbsp;(try&nbsp;(let&nbsp;[read-value&nbsp;(read-string&nbsp;value)]
+                054&nbsp;&nbsp;&nbsp;&nbsp;(try&nbsp;(let&nbsp;[read-value&nbsp;(read-string&nbsp;value)]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                048&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(number?&nbsp;read-value)
+                055&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(number?&nbsp;read-value)
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                049&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(where&nbsp;field&nbsp;&quot;between&quot;
+                056&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(where&nbsp;field&nbsp;&quot;between&quot;
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                050&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;&quot;(&quot;&nbsp;read-value&nbsp;&quot;&nbsp;&quot;&nbsp;read-value&quot;)&quot;))
+                057&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;&quot;(&quot;&nbsp;read-value&nbsp;&quot;&nbsp;&quot;&nbsp;read-value&quot;)&quot;))
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                051&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(term-query&nbsp;field&nbsp;value)))
+                058&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(term-query&nbsp;field&nbsp;value)))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                052&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(catch&nbsp;Exception&nbsp;_
+                059&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(catch&nbsp;Exception&nbsp;_
                 </span><br/>
 <span class="not-covered" title="0 out of 4 forms covered">
-                053&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(term-query&nbsp;field&nbsp;value))))
+                060&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(term-query&nbsp;field&nbsp;value))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                054&nbsp;&nbsp;
+                061&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                055&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:less-than
+                062&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:less-than
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                056&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
+                063&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                057&nbsp;&nbsp;&nbsp;&nbsp;{:range&nbsp;{(keyword&nbsp;field)&nbsp;{:lt&nbsp;(read-string&nbsp;value)}}})
+                064&nbsp;&nbsp;&nbsp;&nbsp;{:range&nbsp;{(keyword&nbsp;field)&nbsp;{:lt&nbsp;(read-string&nbsp;value)}}})
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                058&nbsp;&nbsp;
+                065&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                059&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:less-than-or-equals
+                066&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:less-than-or-equals
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                060&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
+                067&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                061&nbsp;&nbsp;&nbsp;&nbsp;{:range&nbsp;{(keyword&nbsp;field)&nbsp;{:lte&nbsp;(read-string&nbsp;value)}}})
+                068&nbsp;&nbsp;&nbsp;&nbsp;{:range&nbsp;{(keyword&nbsp;field)&nbsp;{:lte&nbsp;(read-string&nbsp;value)}}})
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                062&nbsp;&nbsp;
+                069&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                063&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:greater-than
+                070&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:greater-than
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                064&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
+                071&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                065&nbsp;&nbsp;&nbsp;&nbsp;{:range&nbsp;{(keyword&nbsp;field)&nbsp;{:gt&nbsp;(read-string&nbsp;value)}}})
+                072&nbsp;&nbsp;&nbsp;&nbsp;{:range&nbsp;{(keyword&nbsp;field)&nbsp;{:gt&nbsp;(read-string&nbsp;value)}}})
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                066&nbsp;&nbsp;
+                073&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                067&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:greater-than-or-equals
+                074&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:greater-than-or-equals
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                068&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
+                075&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                069&nbsp;&nbsp;&nbsp;&nbsp;{:range&nbsp;{(keyword&nbsp;field)&nbsp;{:gte&nbsp;(read-string&nbsp;value)}}})
+                076&nbsp;&nbsp;&nbsp;&nbsp;{:range&nbsp;{(keyword&nbsp;field)&nbsp;{:gte&nbsp;(read-string&nbsp;value)}}})
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                070&nbsp;&nbsp;
+                077&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                071&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:between-range-incl
+                078&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:between-range-incl
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                072&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;val-range]
+                079&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;val-range]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                073&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[[gte&nbsp;lte]&nbsp;(read-string&nbsp;val-range)]
+                080&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[[gte&nbsp;lte]&nbsp;(read-string&nbsp;val-range)]
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                074&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:range&nbsp;{(keyword&nbsp;field)&nbsp;{:lte&nbsp;lte&nbsp;:gte&nbsp;gte}}}))
+                081&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:range&nbsp;{(keyword&nbsp;field)&nbsp;{:lte&nbsp;lte&nbsp;:gte&nbsp;gte}}}))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                075&nbsp;&nbsp;
+                082&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                076&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:not-equals
+                083&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:not-equals
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                077&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
+                084&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;value]
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                078&nbsp;&nbsp;&nbsp;&nbsp;(where&nbsp;field&nbsp;&quot;=&quot;&nbsp;value))
+                085&nbsp;&nbsp;&nbsp;&nbsp;(where&nbsp;field&nbsp;&quot;=&quot;&nbsp;value))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                079&nbsp;&nbsp;
+                086&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                080&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:in-set
+                087&nbsp;&nbsp;(defmethod&nbsp;where&nbsp;:in-set
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                081&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;values]
+                088&nbsp;&nbsp;&nbsp;&nbsp;[field&nbsp;_&nbsp;values]
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                082&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[field&nbsp;(str&nbsp;field&nbsp;&quot;.keyword&quot;)
+                089&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[field&nbsp;(str&nbsp;field&nbsp;&quot;.keyword&quot;)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                083&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;values&nbsp;(read-string&nbsp;values)]
+                090&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;values&nbsp;(read-string&nbsp;values)]
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                084&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:terms&nbsp;{(keyword&nbsp;field)&nbsp;values}}))
+                091&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:terms&nbsp;{(keyword&nbsp;field)&nbsp;values}}))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                085&nbsp;&nbsp;
+                092&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                086&nbsp;&nbsp;(defn&nbsp;where-&gt;es
+                093&nbsp;&nbsp;(defn&nbsp;where-&gt;es
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                087&nbsp;&nbsp;&nbsp;&nbsp;&quot;Converts&nbsp;SQL&nbsp;Where&nbsp;clauses&nbsp;into&nbsp;Elasticsearch&nbsp;boolean&nbsp;logic
+                094&nbsp;&nbsp;&nbsp;&nbsp;&quot;Converts&nbsp;SQL&nbsp;Where&nbsp;clauses&nbsp;into&nbsp;Elasticsearch&nbsp;boolean&nbsp;logic
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                088&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOTE:&nbsp;Parsing&nbsp;of&nbsp;nested&nbsp;logical&nbsp;statements&nbsp;using&nbsp;brackets&nbsp;is&nbsp;not&nbsp;supported&nbsp;yet&quot;
+                095&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NOTE:&nbsp;Parsing&nbsp;of&nbsp;nested&nbsp;logical&nbsp;statements&nbsp;using&nbsp;brackets&nbsp;is&nbsp;not&nbsp;supported&nbsp;yet&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                089&nbsp;&nbsp;&nbsp;&nbsp;[statements]
+                096&nbsp;&nbsp;&nbsp;&nbsp;[statements]
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                090&nbsp;&nbsp;&nbsp;&nbsp;(update-in
+                097&nbsp;&nbsp;&nbsp;&nbsp;(update-in
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                091&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:query
+                098&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:query
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                092&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:bool
+                099&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:bool
                 </span><br/>
 <span class="covered" title="8 out of 8 forms covered">
-                093&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(cond-&gt;&nbsp;{:must
+                100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(cond-&gt;&nbsp;{:must
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                094&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;(fn&nbsp;[ands]
+                101&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;(fn&nbsp;[ands]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                095&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(map?&nbsp;ands)
+                102&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(map?&nbsp;ands)
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                096&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:query&nbsp;(where-&gt;es&nbsp;ands))
+                103&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:query&nbsp;(where-&gt;es&nbsp;ands))
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                097&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apply&nbsp;where&nbsp;ands)))
+                104&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apply&nbsp;where&nbsp;ands)))
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                098&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;statements&nbsp;:and&nbsp;:true))
+                105&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;statements&nbsp;:and&nbsp;:true))
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                099&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:should&nbsp;(concat
+                106&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:should&nbsp;(concat
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;(fn&nbsp;[ors]
+                107&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;(fn&nbsp;[ors]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                101&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(map?&nbsp;ors)
+                108&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(map?&nbsp;ors)
                 </span><br/>
 <span class="not-covered" title="0 out of 5 forms covered">
-                102&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:query&nbsp;(where-&gt;es&nbsp;ors))
+                109&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:query&nbsp;(where-&gt;es&nbsp;ors))
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                103&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apply&nbsp;where&nbsp;ors)))
+                110&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apply&nbsp;where&nbsp;ors)))
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                104&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;statements&nbsp;:or&nbsp;:true))
+                111&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;statements&nbsp;:or&nbsp;:true))
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                105&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;(fn&nbsp;[s]
+                112&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;(fn&nbsp;[s]
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                106&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:bool
+                113&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:bool
                 </span><br/>
 <span class="covered" title="6 out of 6 forms covered">
-                107&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:must_not&nbsp;(if&nbsp;(map?&nbsp;s)
+                114&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:must_not&nbsp;(if&nbsp;(map?&nbsp;s)
                 </span><br/>
 <span class="not-covered" title="0 out of 5 forms covered">
-                108&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:query&nbsp;(where-&gt;es&nbsp;s))
+                115&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:query&nbsp;(where-&gt;es&nbsp;s))
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                109&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apply&nbsp;where&nbsp;s))}})
+                116&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apply&nbsp;where&nbsp;s))}})
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                110&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;statements&nbsp;:or&nbsp;:false)))}
+                117&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;statements&nbsp;:or&nbsp;:false)))}
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                111&nbsp;&nbsp;
+                118&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                112&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(seq&nbsp;(-&gt;&nbsp;statements&nbsp;:and&nbsp;:false))
+                119&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(seq&nbsp;(-&gt;&nbsp;statements&nbsp;:and&nbsp;:false))
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                113&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(merge&nbsp;{:must_not
+                120&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(merge&nbsp;{:must_not
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                114&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;(fn&nbsp;[false-ands]
+                121&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;(fn&nbsp;[false-ands]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                115&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(map?&nbsp;false-ands)
+                122&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(map?&nbsp;false-ands)
                 </span><br/>
 <span class="not-covered" title="0 out of 5 forms covered">
-                116&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:query&nbsp;(where-&gt;es&nbsp;false-ands))
+                123&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:query&nbsp;(where-&gt;es&nbsp;false-ands))
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                117&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apply&nbsp;where&nbsp;false-ands)))
+                124&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apply&nbsp;where&nbsp;false-ands)))
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                118&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;statements&nbsp;:and&nbsp;:false))}))}}
+                125&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;statements&nbsp;:and&nbsp;:false))}))}}
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                119&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[:query&nbsp;:bool]
+                126&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[:query&nbsp;:bool]
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                120&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(fn&nbsp;[{:keys&nbsp;[should&nbsp;must]&nbsp;:as&nbsp;m}]
+                127&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(fn&nbsp;[{:keys&nbsp;[should&nbsp;must]&nbsp;:as&nbsp;m}]
                 </span><br/>
 <span class="covered" title="10 out of 10 forms covered">
-                121&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(cond-&gt;&nbsp;m
+                128&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(cond-&gt;&nbsp;m
                 </span><br/>
 <span class="covered" title="6 out of 6 forms covered">
-                122&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(empty?&nbsp;should)&nbsp;(dissoc&nbsp;:should)
+                129&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(empty?&nbsp;should)&nbsp;(dissoc&nbsp;:should)
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                123&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(empty?&nbsp;must)&nbsp;(dissoc&nbsp;:must)))))
+                130&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(empty?&nbsp;must)&nbsp;(dissoc&nbsp;:must)))))
                 </span><br/>
  </body>
 </html>
