@@ -1,6 +1,7 @@
 (ns org.clojars.punit-naik.sqles.core
   (:require [cheshire.core :as json]
             [clj-http.client :as http]
+            [clojure.pprint :as pprint]
             [clojure.string :as str]
             [org.clojars.punit-naik.sqles.parse-sql :as sql])
   (:import [clojure.lang ExceptionInfo]
@@ -60,4 +61,8 @@
 
 (defn -main
   [& args]
-  (run-query (sql/parse-query (str/join " " args))))
+  (->> args
+       (str/join " ")
+       sql/parse-query
+       run-query
+       pprint/pprint))
