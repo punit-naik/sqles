@@ -17,7 +17,9 @@
       (get {"select" query/select
             "where" query/where->es
             "from" (constantly nil)
-            "limit" query/limit}
+            "limit" query/limit
+            "order by" query/order-by
+            "order" (constantly nil)}
            clause))))
 
 (defn find-index
@@ -52,6 +54,10 @@
   [_ [limit]]
   limit)
 
+(defmethod handle-clause-data "order by"
+  [_ clause-data]
+  (handle-clause-data "select" clause-data))
+
 (defn clean-query
   "Removes spaces before and after commas
    And spaces after opened round bracket and before closed round bracket
@@ -61,6 +67,13 @@
       (str/replace #"\((?![^(\"|\'|\`)]*(\"|\'|\`)\B)\s+" "(")
       (str/replace #"(?!\B\"[^(\"|\'|\`)]*)[\s+]?\)" ")")
       (str/replace #"NULL|null" "nil")))
+
+(defn get-clause
+  [[first-part second-part]]
+  (let [first-part (str/lower-case first-part)]
+    (if (contains? #{"group" "order"} first-part)
+      [first-part second-part]
+      [first-part])))
 
 (defn parse-query
   [sql-query]
@@ -75,9 +88,11 @@
                    :method :post}]
       (if (empty? ps)
         result
-        (let [clause (str/lower-case (first ps))
-              clause-data (take-till-next-clause (rest ps))
-              remaining-parts (drop (count clause-data) (rest ps))
+        (let [clause-coll (get-clause ps)
+              clause (str/lower-case (str/join " " clause-coll))
+              remaining-parts (drop (count clause-coll) ps)
+              clause-data (take-till-next-clause remaining-parts)
+              remaining-parts (drop (count clause-data) remaining-parts)
               clause-data (handle-clause-data clause clause-data)
               intermediate-es-query ((clause->query-fn clause) clause-data)]
           (recur remaining-parts

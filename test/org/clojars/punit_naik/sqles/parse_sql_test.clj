@@ -14,6 +14,8 @@
   (is (= query/limit (parse-sql/clause->query-fn "limit")))
   (is (= query/where->es (parse-sql/clause->query-fn "where")))
   (is (nil? ((parse-sql/clause->query-fn "from"))))
+  (is (nil? ((parse-sql/clause->query-fn "order"))))
+  (is (= query/order-by (parse-sql/clause->query-fn "order by")))
   (is (nil? (parse-sql/clause->query-fn nil))))
 
 (deftest find-index-test
@@ -30,13 +32,17 @@
   (is (= ["a" "b" "c"] (utils/handle-clause-data "select" [" a," "b ," "c"])))
   (is (= ["a" "b" "c"] (utils/handle-clause-data "select" ["a, b, c"])))
   (is (= ["a" "b" "c"] (utils/handle-clause-data "select" ["a , b , c"])))
-  (is (= {:and {:true [["a" "=" "\"A, a\""]], :false []},
-          :or {:true [], :false []}}
+  (is (= {:and {:true [["a" "=" "\"A, a\""]] :false []}
+          :or {:true [] :false []}}
          (utils/handle-clause-data "where"  ["a=\"A, a\""])))
-  (is (= {:and {:true [["x" "=" "1"]], :false []},
-          :or {:true [], :false []}}
+  (is (= {:and {:true [["x" "=" "1"]] :false []}
+          :or {:true [] :false []}}
          (utils/handle-clause-data "where" ["x" "=" "1"])))
-  (is (= "10" (utils/handle-clause-data "limit" ["10"]))))
+  (is (= "10" (utils/handle-clause-data "limit" ["10"])))
+  (is (= ["a" "b" "c"] (utils/handle-clause-data "order by" ["a," "b ," "c"])))
+  (is (= ["a" "b" "c"] (utils/handle-clause-data "order by" [" a," "b ," "c"])))
+  (is (= ["a" "b" "c"] (utils/handle-clause-data "order by" ["a, b, c"])))
+  (is (= ["a" "b" "c"] (utils/handle-clause-data "order by" ["a , b , c"]))))
 
 (deftest clean-query-test
   (is (= "select a,b,c from test-1" (parse-sql/clean-query "select a, b, c from test-1")))
@@ -61,9 +67,18 @@
             :method :post}
            (parse-sql/parse-query "select * from test-1")))
     (is (= {:url "http://localhost:9200/test-4/_search"
-            :body {:query {:bool {:must [{:range {:id {:lte 10, :gte 1}}}]
+            :body {:query {:bool {:must [{:range {:id {:lte 10 :gte 1}}}]
                                   :must_not [{:term {:name.keyword "Bob-2"}}]}}}
             :method :post}
            (parse-sql/parse-query "select * from test-4 where id between (1,10) and name!=Bob-2")))
-    ;; TODO: Need to add more complex queries
-    ))
+    (is (= {:url "http://localhost:9200/test-5/_search"
+            :body {:query {:match_all {}}
+                   :size "2"}
+            :method :post}
+           (parse-sql/parse-query "select * from test-5 limit 2")))
+    (is (= {:url "http://localhost:9200/test/_search"
+            :body {:query {:match_all {}}
+                   :sort [{:id {:order "asc"}}]
+                   :size "10"}
+            :method :post}
+           (parse-sql/parse-query "select * from test order by id limit 10")))))
