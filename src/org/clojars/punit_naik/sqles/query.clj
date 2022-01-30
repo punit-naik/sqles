@@ -7,16 +7,25 @@
   [s]
   (str/replace s #"\"|\'" ""))
 
+(defn separate-fields
+  "Separates fields into normal fields and aggregate function fields"
+  [fields]
+  (let [check-fn (fn [field] (re-matches #".*\(.*\)" field))]
+    [(remove check-fn fields)
+     (filter check-fn fields)]))
+
 (defn select
   [fields]
   (let [fields (if (coll? fields) fields [fields])]
     (if-not (some (fn [field] (re-matches #".*\*.*" field)) fields)
-      (let [fields (if (coll? fields) fields [fields])]
+      (let [[fields agg-fields] (separate-fields fields)]
         (when-not (seq
                    (some (fn [field]
                            (re-matches #".*\*" field))
                          fields))
-          {:_source (map keyword fields)}))
+          (cond-> {}
+            (seq fields) (assoc :_source (map keyword fields))
+            (seq agg-fields) (assoc :agg-fields agg-fields))))
       {:query {:match_all {}}})))
 
 (defn limit
@@ -131,8 +140,31 @@
 
 (defn order-by
   [clause-data]
-  (reduce (fn [m [sort-field order :as x]]
+  (reduce (fn [m [sort-field order]]
             (update m :sort conj
                     {(keyword sort-field)
                      {:order (or order "asc")}}))
           {:sort []} clause-data))
+
+;; TODO: `group by` functionaltiy
+;; https://stackoverflow.com/a/27584567/3752442
+
+(defn valid-agg-fn?
+  [f]
+  (contains? #{"count" "avg" "sum" "mix" "max"} f))
+
+(defn agg-fields
+  [fields]
+  (keep
+   (fn [field]
+     (when (seq (re-matches #"[a-zA-Z]+\([a-zA-Z]+\)" field))
+       (let [[f ff] (-> field
+                        (str/replace #"\(" "|")
+                        (str/replace #"\)" "")
+                        (str/split #"\|"))]
+         (when (valid-agg-fn? f)
+           ))))
+   fields))
+
+(defn group-by
+  [{:keys [clause-data agg-fields]}])

@@ -94,4 +94,11 @@
                           {:id2 {:order "asc"}}]
                    :size "10"}
             :method :post}
-           (parse-sql/parse-query "select * from test order by id, id2 limit 10")))))
+           (parse-sql/parse-query "select * from test order by id, id2 limit 10")))
+    (is (= {:url "http://localhost:9200/test/_search"
+            :body {:query {:match_all {}}
+                   :sort [{:id {:order "asc"}}
+                          {:id2 {:order "asc"}}]
+                   :size "10"}
+            :method :post}
+           (parse-sql/parse-query "select count(accounts) from test group by country, name")))))

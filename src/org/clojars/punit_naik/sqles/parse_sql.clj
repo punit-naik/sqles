@@ -19,7 +19,9 @@
             "from" (constantly nil)
             "limit" query/limit
             "order by" query/order-by
-            "order" (constantly nil)}
+            "order" (constantly nil)
+            "group by" query/group-by
+            "group" (constantly nil)}
            clause))))
 
 (defn find-index
@@ -68,6 +70,10 @@
       (throw (AssertionError. "Wrong `ORDER BY` clause data"))
       clause-data)))
 
+(defmethod handle-clause-data "group by"
+  [_ clause-data]
+  (handle-clause-data "select" clause-data))
+
 (defn clean-query
   "Removes spaces before and after commas
    And spaces after opened round bracket and before closed round bracket
@@ -85,6 +91,11 @@
       [first-part second-part]
       [first-part])))
 
+(defn query-order
+  "Checks if the order of the clauses of the SQL query is correct"
+  [sql-query]
+  )
+
 (defn parse-query
   [sql-query]
   (let [sql-query (clean-query sql-query)
@@ -92,18 +103,24 @@
         parts (str/split sql-query
                          #"\s+(?=([^\"\'\`]*[\"|\'|\`][^\"\'\`]*[\"|\'|\`])*[^\"\'\`]*$)")]
     (loop [ps parts
-           result {:url (str (query/from index)
-                             (query->es-op (first parts)))
-                   :body {}
-                   :method :post}]
+           {{:keys [agg-fields]} :body :as result}
+           {:url (str (query/from index)
+                      (query->es-op (first parts)))
+            :body {}
+            :method :post}]
       (if (empty? ps)
-        result
+        (dissoc result :agg-fields)
         (let [clause-coll (get-clause ps)
               clause (str/lower-case (str/join " " clause-coll))
               remaining-parts (drop (count clause-coll) ps)
               clause-data (take-till-next-clause remaining-parts)
               remaining-parts (drop (count clause-data) remaining-parts)
               clause-data (handle-clause-data clause clause-data)
-              intermediate-es-query ((clause->query-fn clause) clause-data)]
+              intermediate-es-query ((clause->query-fn clause)
+                                     (if (= clause "group by")
+                                       (if-not (>= (count agg-fields) 1)
+                                         (throw (AssertionError. "Wrong `GROUP BY` clause data"))
+                                         {:clause-data clause-data :agg-fields agg-fields})
+                                       clause-data))]
           (recur remaining-parts
                  (update result :body merge intermediate-es-query)))))))
