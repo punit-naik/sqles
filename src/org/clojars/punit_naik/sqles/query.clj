@@ -130,11 +130,9 @@
        (empty? must) (dissoc :must)))))
 
 (defn order-by
-  "NOTE: Does not support `sort mode` for now"
   [clause-data]
-  (reduce (fn [m sort-by-data]
+  (reduce (fn [m [sort-field order :as x]]
             (update m :sort conj
-                    (let [[sort-field order] (str/split sort-by-data #"\s")]
-                      {(keyword sort-field)
-                       {:order (or order "asc")}})))
+                    {(keyword sort-field)
+                     {:order (or order "asc")}}))
           {:sort []} clause-data))

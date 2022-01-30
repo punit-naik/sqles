@@ -75,8 +75,8 @@
                               {:bool {:must_not {:range {:c {:lte 3, :gte 3}}}}}]}}]}}})))
 
 (deftest order-by-test
-  (is (= (query/order-by ["id"])
+  (is (= (query/order-by [["id"]])
          {:sort [{:id {:order "asc"}}]}))
-  (is (= (query/order-by ["id desc" "price desc"])
+  (is (= (query/order-by [["id" "desc"] ["price" "desc"]])
          {:sort [{:id {:order "desc"}}
                  {:price {:order "desc"}}]})))

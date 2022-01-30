@@ -56,7 +56,17 @@
 
 (defmethod handle-clause-data "order by"
   [_ clause-data]
-  (handle-clause-data "select" clause-data))
+  (let [;; NOTE: Joining by `\s` first as we are not splitting the string on `,` in case of multiple `order by` fields
+        clause-data-str (str/join " " clause-data)
+        clause-data (->> (str/split clause-data-str #",")
+                         (map (fn [s] (str/split s #"\s"))))]
+    (if-not (every? (fn [[_ order :as x]]
+                      (and (<= (count x) 2)
+                           (or (nil? order)
+                               (= order "asc")
+                               (= order "desc")))) clause-data)
+      (throw (AssertionError. "Wrong `ORDER BY` clause data"))
+      clause-data)))
 
 (defn clean-query
   "Removes spaces before and after commas

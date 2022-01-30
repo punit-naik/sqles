@@ -39,10 +39,9 @@
           :or {:true [] :false []}}
          (utils/handle-clause-data "where" ["x" "=" "1"])))
   (is (= "10" (utils/handle-clause-data "limit" ["10"])))
-  (is (= ["a" "b" "c"] (utils/handle-clause-data "order by" ["a," "b ," "c"])))
-  (is (= ["a" "b" "c"] (utils/handle-clause-data "order by" [" a," "b ," "c"])))
-  (is (= ["a" "b" "c"] (utils/handle-clause-data "order by" ["a, b, c"])))
-  (is (= ["a" "b" "c"] (utils/handle-clause-data "order by" ["a , b , c"]))))
+  (is (= [["id" "desc"] ["id2" "asc"]] (utils/handle-clause-data "order by" ["id" "desc,id2" "asc"])))
+  (is (= [["id"]] (utils/handle-clause-data "order by" ["id"])))
+  (is (= [["id"] ["id2"]] (utils/handle-clause-data "order by" ["id,id2"]))))
 
 (deftest clean-query-test
   (is (= "select a,b,c from test-1" (parse-sql/clean-query "select a, b, c from test-1")))
@@ -81,4 +80,18 @@
                    :sort [{:id {:order "asc"}}]
                    :size "10"}
             :method :post}
-           (parse-sql/parse-query "select * from test order by id limit 10")))))
+           (parse-sql/parse-query "select * from test order by id limit 10")))
+    (is (= {:url "http://localhost:9200/test/_search"
+            :body {:query {:match_all {}}
+                   :sort [{:id {:order "desc"}}
+                          {:id2 {:order "asc"}}]
+                   :size "10"}
+            :method :post}
+           (parse-sql/parse-query "select * from test order by id desc, id2 asc limit 10")))
+    (is (= {:url "http://localhost:9200/test/_search"
+            :body {:query {:match_all {}}
+                   :sort [{:id {:order "asc"}}
+                          {:id2 {:order "asc"}}]
+                   :size "10"}
+            :method :post}
+           (parse-sql/parse-query "select * from test order by id, id2 limit 10")))))
