@@ -8,16 +8,16 @@
   (str/replace s #"\"|\'" ""))
 
 (defn select
-  [[first-field :as fields]]
-  (if-not (and (= (count fields) 1)
-               (= first-field "*"))
-    (let [fields (if (coll? fields) fields [fields])]
-      (when-not (seq
-                 (some (fn [field]
-                         (re-matches #".*\*" field))
-                       fields))
-        {:_source (map keyword fields)}))
-    {:query {:match_all {}}}))
+  [fields]
+  (let [fields (if (coll? fields) fields [fields])]
+    (if-not (some (fn [field] (re-matches #".*\*.*" field)) fields)
+      (let [fields (if (coll? fields) fields [fields])]
+        (when-not (seq
+                   (some (fn [field]
+                           (re-matches #".*\*" field))
+                         fields))
+          {:_source (map keyword fields)}))
+      {:query {:match_all {}}})))
 
 (defn limit
   [n]
