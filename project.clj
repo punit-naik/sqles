@@ -7,6 +7,6 @@
                  [com.grammarly/omniconf "0.4.3"]
                  [clj-http "3.12.3"]
                  [cheshire "5.10.1"]]
-  :profiles {:es-dev {:jvm-opts ["-Des-hostname=localhost" "-Des-port=9200"]}}
+  :profiles {:test {:jvm-opts ["-Des-hostname=localhost" "-Des-port=9200"]}}
   :repl-options {:init-ns org.clojars.punit-naik.sqles.core}
   :main org.clojars.punit-naik.sqles.core)

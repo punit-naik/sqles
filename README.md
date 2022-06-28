@@ -9,7 +9,7 @@ A Clojure library designed to convert SQL statements into Elasticsearch requests
 
 ### Test
 ```
-lein with-profiles +es-dev test
+lein test
 ```
 
 ## Docs
