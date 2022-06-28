@@ -3,7 +3,8 @@
             [org.clojars.punit-naik.sqles.config :as config]
             [org.clojars.punit-naik.sqles.parse-sql :as parse-sql]
             [org.clojars.punit-naik.sqles.query :as query]
-            [org.clojars.punit-naik.sqles.parse-sql.utils :as utils]))
+            [org.clojars.punit-naik.sqles.parse-sql.utils :as utils]
+            [cheshire.core :as json]))
 
 (deftest query->es-op-test
   (is (= "/_search" (parse-sql/query->es-op "select")))
@@ -94,4 +95,8 @@
                           {:id2 {:order "asc"}}]
                    :size "10"}
             :method :post}
-           (parse-sql/parse-query "select * from test order by id, id2 limit 10")))))
+           (parse-sql/parse-query "select * from test order by id, id2 limit 10")))
+    (is (= {:url "http://localhost:9200/job/count"
+            :body {:query {:bool {:must [{:range {:job_id {:gt 1000}}} {:range {:job_id {:lt 400000000}}}]}}}
+            :method :post}
+           (parse-sql/parse-query "select count(*) from job where job_id > 1000 and job_id < 400000000")))))

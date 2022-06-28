@@ -7,7 +7,8 @@
 (defn query->es-op
   [clause]
   (let [clause (str/lower-case clause)]
-    (get {"select" "/_search"}
+    (get {"select" "/_search"
+          "count"  "/count"}
          clause)))
 
 (defn clause->query-fn
@@ -85,6 +86,11 @@
       [first-part second-part]
       [first-part])))
 
+(defn count-query?
+  "Returns true if the SQL query only has `count(.)`"
+  [sql-query]
+  (seq (re-matches #"select count\(.*\) from.*" (str/lower-case sql-query))))
+
 (defn parse-query
   [sql-query]
   (let [sql-query (clean-query sql-query)
@@ -93,7 +99,10 @@
                          #"\s+(?=([^\"\'\`]*[\"|\'|\`][^\"\'\`]*[\"|\'|\`])*[^\"\'\`]*$)")]
     (loop [ps parts
            result {:url (str (query/from index)
-                             (query->es-op (first parts)))
+                             (query->es-op
+                              (if (count-query? sql-query)
+                                "count"
+                                (first parts))))
                    :body {}
                    :method :post}]
       (if (empty? ps)
