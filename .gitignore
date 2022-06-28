@@ -19,3 +19,4 @@ pom.xml.asc
 *.prefs
 .vscode
 output.calva-repl
+.clj-kondo
