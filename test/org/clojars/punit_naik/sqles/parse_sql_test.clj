@@ -96,7 +96,7 @@
                    :size "10"}
             :method :post}
            (parse-sql/parse-query "select * from test order by id, id2 limit 10")))
-    (is (= {:url "http://localhost:9200/job/count"
+    (is (= {:url "http://localhost:9200/job/_count"
             :body {:query {:bool {:must [{:range {:job_id {:gt 1000}}} {:range {:job_id {:lt 400000000}}}]}}}
             :method :post}
            (parse-sql/parse-query "select count(*) from job where job_id > 1000 and job_id < 400000000")))))

@@ -8,7 +8,7 @@
   [clause]
   (let [clause (str/lower-case clause)]
     (get {"select" "/_search"
-          "count"  "/count"}
+          "count"  "/_count"}
          clause)))
 
 (defn clause->query-fn
