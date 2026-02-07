@@ -1,8 +1,9 @@
 (ns org.clojars.punit-naik.sqles.config-test
-  (:require [clojure.test :refer [deftest testing is]]
-            [org.clojars.punit-naik.sqles.config :as config]
-            [omniconf.core :as cfg]
-            [clj-http.client :as client]))
+  (:require
+   [clojure.test :refer [deftest testing is]]
+   [org.clojars.punit-naik.sqles.config :as config]
+   [omniconf.core :as cfg]
+   [clj-http.client :as client]))
 
 (deftest when-let-multiple-test
   (testing "`when-let-multiple` macro"
@@ -29,7 +30,12 @@
                     (config/ping-server "http://google.com"))) 405)))
 
 (deftest server-up?-test
-  (is (boolean? (config/server-up? "http://localhost:9200"))))
+  (with-redefs [client/get (constantly {:body "{\"number_of_nodes\":1}"
+                                        :status 200})]
+    (is (true? (config/server-up? "http://localhost:9200"))))
+  (with-redefs [client/get (constantly {:body "{\"number_of_nodes\":0}"
+                                        :status 200})]
+    (is (false? (config/server-up? "http://localhost:9200")))))
 
 (deftest generate-server-url-from-config-test
   (is (= ":es-protocol://:es-username::es-password@:es-hostname::es-port"
@@ -40,4 +46,7 @@
   (is (= "http://localhost:9200/"
          (with-redefs [config/generate-server-url-from-config (constantly "http://localhost:9200/")
                        config/server-up? (constantly true)]
-           (config/generate-server-url-from-config)))))
+           (config/es-server))))
+  (is (nil? (with-redefs [config/generate-server-url-from-config (constantly "http://localhost:9200/")
+                          config/server-up? (constantly false)]
+               (config/es-server)))))

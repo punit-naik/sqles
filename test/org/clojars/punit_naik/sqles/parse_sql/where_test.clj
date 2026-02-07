@@ -1,14 +1,18 @@
 (ns org.clojars.punit-naik.sqles.parse-sql.where-test
-  (:require [clojure.test :refer [deftest is]]
-            [org.clojars.punit-naik.sqles.parse-sql.where :as where]))
+  (:require
+   [clojure.test :refer [deftest is]]
+   [org.clojars.punit-naik.sqles.parse-sql.where :as where]))
 
 (deftest un-separated-operands?-test
   (is (= (where/un-separated-operands? "a=1") "="))
-  (is (nil? (where/un-separated-operands? "a = 1"))))
+  (is (nil? (where/un-separated-operands? "a = 1")))
+  (is (= (where/un-separated-operands? "a<=1") "<="))
+  (is (= (where/un-separated-operands? "a>=1") ">=")))
 
 (deftest separate-operands-test
   (is (= (where/separate-operands ["a=1" "b=2"]) ["a" "=" "1" "b" "=" "2"]))
-  (is (= (where/separate-operands ["c=3" "d = 4"]) ["c" "=" "3" "d = 4"])))
+  (is (= (where/separate-operands ["c=3" "d = 4"]) ["c" "=" "3" "d = 4"]))
+  (is (= (where/separate-operands ["e!=5"]) ["e" "!=" "5"])))
 
 (deftest nested-handle-clause-data-test
   (is (= (where/nested-handle-clause-data ["(b!=2 or c!=3)"])
@@ -63,4 +67,7 @@
           :or {:true (), :false ()}}))
   (is (= (where/handle-clause-data ["a=1" "and" "b=2" "or" "c=3" "and" "d!=4" "or" "e" "=" "5"])
          {:and {:true [["a" "=" "1"] ["b" "=" "2"]] :false [["d" "!=" "4"]]}
-          :or {:true [["c" "=" "3"] ["e" "=" "5"]] :false []}})))
+          :or {:true [["c" "=" "3"] ["e" "=" "5"]] :false []}}))
+  (is (= (where/handle-clause-data ["a=1" "and" "b" "not" "in" "(1, 2)"])
+         {:and {:true [["a" "=" "1"]] :false [["b" "in" "(1, 2)"]]}
+          :or {:true [] :false []}})))
