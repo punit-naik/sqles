@@ -1,8 +1,9 @@
 (ns org.clojars.punit-naik.sqles.config
-  (:require [omniconf.core :as cfg]
-            [clojure.string :as str]
-            [clj-http.client :as http]
-            [cheshire.core :as json]))
+  (:require
+   [omniconf.core :as cfg]
+   [clojure.string :as str]
+   [clj-http.client :as http]
+   [cheshire.core :as json]))
 
 (defmacro when-let-multiple
   [bindings & body]
@@ -17,10 +18,12 @@
                  :default "http"}
    :es-hostname {:description "Where service is deployed"
                  :type :string
-                 :required true}
+                 :required true
+                 :default "localhost"}
    :es-port {:description "HTTP port"
              :type :number
-             :required true}
+             :required true
+             :default 9200}
    :es-username {:description "Username for the ES Server"
                  :type :string}
    :es-password {:description "Password for the ES Server"
