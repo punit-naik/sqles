@@ -1,6 +1,8 @@
 (ns org.clojars.punit-naik.sqles.query
-  (:require [org.clojars.punit-naik.sqles.config :as config]
-            [clojure.string :as str]))
+  (:require
+   [org.clojars.punit-naik.sqles.config :as config]
+   [clojure.edn :as edn]
+   [clojure.string :as str]))
 
 (defn remove-quotes
   "Removes single/double quotes from a string"
@@ -25,7 +27,10 @@
 
 (defn from
   [table]
-  (str (config/es-server) table))
+  (let [server (config/es-server)]
+    (when-not server
+      (throw (ex-info "Elasticsearch server is unavailable" {:table table})))
+    (str server table)))
 
 (defn op->op-key
   [op]
@@ -51,7 +56,7 @@
 
 (defmethod where :equals
   [field _ value]
-  (try (let [read-value (read-string value)]
+  (try (let [read-value (edn/read-string value)]
          (if (number? read-value)
            (where field "between"
                   (str "(" read-value " " read-value")"))
@@ -61,23 +66,23 @@
 
 (defmethod where :less-than
   [field _ value]
-  {:range {(keyword field) {:lt (read-string value)}}})
+  {:range {(keyword field) {:lt (edn/read-string value)}}})
 
 (defmethod where :less-than-or-equals
   [field _ value]
-  {:range {(keyword field) {:lte (read-string value)}}})
+  {:range {(keyword field) {:lte (edn/read-string value)}}})
 
 (defmethod where :greater-than
   [field _ value]
-  {:range {(keyword field) {:gt (read-string value)}}})
+  {:range {(keyword field) {:gt (edn/read-string value)}}})
 
 (defmethod where :greater-than-or-equals
   [field _ value]
-  {:range {(keyword field) {:gte (read-string value)}}})
+  {:range {(keyword field) {:gte (edn/read-string value)}}})
 
 (defmethod where :between-range-incl
   [field _ val-range]
-  (let [[gte lte] (read-string val-range)]
+  (let [[gte lte] (edn/read-string val-range)]
     {:range {(keyword field) {:lte lte :gte gte}}}))
 
 (defmethod where :not-equals
@@ -87,7 +92,7 @@
 (defmethod where :in-set
   [field _ values]
   (let [field (str field ".keyword")
-        values (read-string values)]
+        values (edn/read-string values)]
     {:terms {(keyword field) values}}))
 
 (defn where->es

@@ -1,14 +1,15 @@
 (ns org.clojars.punit-naik.sqles.parse-sql.where
-  (:require [clojure.string :as str]))
+  (:require
+   [clojure.string :as str]))
 
 (def operators-used-without-spacing
   "Operatos which can be used without spacing between operands"
-  #{"="
-    "<"
-    "<="
-    ">"
-    ">="
-    "!="})
+  ["<="
+   ">="
+   "!="
+   "="
+   "<"
+   ">"])
 
 (defn un-separated-operands?
   "Checks if the operands of the where statement are separated (by space) or not
