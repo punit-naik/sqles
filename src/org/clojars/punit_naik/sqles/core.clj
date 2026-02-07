@@ -1,14 +1,16 @@
 (ns org.clojars.punit-naik.sqles.core
-  (:require [cheshire.core :as json]
-            [clj-http.client :as http]
-            [clojure.pprint :as pprint]
-            [clojure.string :as str]
-            [org.clojars.punit-naik.sqles.parse-sql :as sql])
-  (:import [clojure.lang ExceptionInfo]
-           [java.lang IllegalArgumentException]
-           [java.net UnknownHostException]
-           [org.apache.http ProtocolException]
-           [java.net ConnectException]))
+  (:require
+   [cheshire.core :as json]
+   [clj-http.client :as http]
+   [clojure.pprint :as pprint]
+   [clojure.string :as str]
+   [org.clojars.punit-naik.sqles.parse-sql :as sql])
+  (:import
+   [clojure.lang ExceptionInfo]
+   [java.lang IllegalArgumentException]
+   [java.net UnknownHostException]
+   [org.apache.http ProtocolException]
+   [java.net ConnectException]))
 
 (defmulti method->http-fn
   (fn [method] method))

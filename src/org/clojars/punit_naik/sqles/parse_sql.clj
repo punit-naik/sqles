@@ -1,8 +1,9 @@
 (ns org.clojars.punit-naik.sqles.parse-sql
-  (:require [clojure.string :as str]
-            [org.clojars.punit-naik.sqles.query :as query]
-            [org.clojars.punit-naik.sqles.parse-sql.utils :refer [handle-clause-data]]
-            [org.clojars.punit-naik.sqles.parse-sql.where :as where]))
+  (:require
+   [clojure.string :as str]
+   [org.clojars.punit-naik.sqles.query :as query]
+   [org.clojars.punit-naik.sqles.parse-sql.utils :refer [handle-clause-data]]
+   [org.clojars.punit-naik.sqles.parse-sql.where :as where]))
 
 (defn query->es-op
   [clause]
