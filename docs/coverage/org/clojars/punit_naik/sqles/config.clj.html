@@ -8,223 +8,232 @@
                 001&nbsp;&nbsp;(ns&nbsp;org.clojars.punit-naik.sqles.config
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                002&nbsp;&nbsp;&nbsp;&nbsp;(:require&nbsp;[omniconf.core&nbsp;:as&nbsp;cfg]
+                002&nbsp;&nbsp;&nbsp;&nbsp;(:require
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                003&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[clojure.string&nbsp;:as&nbsp;str]
+                003&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[omniconf.core&nbsp;:as&nbsp;cfg]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                004&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[clj-http.client&nbsp;:as&nbsp;http]
+                004&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[clojure.string&nbsp;:as&nbsp;str]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                005&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[cheshire.core&nbsp;:as&nbsp;json]))
+                005&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[clj-http.client&nbsp;:as&nbsp;http]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                006&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[cheshire.core&nbsp;:as&nbsp;json]))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                006&nbsp;&nbsp;
+                007&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="49 out of 49 forms covered">
-                007&nbsp;&nbsp;(defmacro&nbsp;when-let-multiple
+                008&nbsp;&nbsp;(defmacro&nbsp;when-let-multiple
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                008&nbsp;&nbsp;&nbsp;&nbsp;[bindings&nbsp;&amp;&nbsp;body]
+                009&nbsp;&nbsp;&nbsp;&nbsp;[bindings&nbsp;&amp;&nbsp;body]
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                009&nbsp;&nbsp;&nbsp;&nbsp;`(let&nbsp;~bindings
+                010&nbsp;&nbsp;&nbsp;&nbsp;`(let&nbsp;~bindings
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                010&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(and&nbsp;~@(take-nth&nbsp;2&nbsp;bindings))
+                011&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(and&nbsp;~@(take-nth&nbsp;2&nbsp;bindings))
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                011&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do&nbsp;~@body))))
+                012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do&nbsp;~@body))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                012&nbsp;&nbsp;
+                013&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                013&nbsp;&nbsp;(cfg&#x2F;define
+                014&nbsp;&nbsp;(cfg&#x2F;define
                 </span><br/>
 <span class="covered" title="15 out of 15 forms covered">
-                014&nbsp;&nbsp;&nbsp;&nbsp;{:es-protocol&nbsp;{:description&nbsp;&quot;Protocol&nbsp;to&nbsp;contact&nbsp;the&nbsp;ES&nbsp;Server&quot;
+                015&nbsp;&nbsp;&nbsp;&nbsp;{:es-protocol&nbsp;{:description&nbsp;&quot;Protocol&nbsp;to&nbsp;contact&nbsp;the&nbsp;ES&nbsp;Server&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:string
+                016&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:string
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                016&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:one-of&nbsp;[&quot;http&quot;&nbsp;&quot;https&quot;]
+                017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:one-of&nbsp;[&quot;http&quot;&nbsp;&quot;https&quot;]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:default&nbsp;&quot;http&quot;}
-                </span><br/>
-<span class="covered" title="7 out of 7 forms covered">
-                018&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:es-hostname&nbsp;{:description&nbsp;&quot;Where&nbsp;service&nbsp;is&nbsp;deployed&quot;
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                019&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:string
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                020&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:required&nbsp;true}
-                </span><br/>
-<span class="covered" title="7 out of 7 forms covered">
-                021&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:es-port&nbsp;{:description&nbsp;&quot;HTTP&nbsp;port&quot;
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                022&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:number
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                023&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:required&nbsp;true}
-                </span><br/>
-<span class="covered" title="5 out of 5 forms covered">
-                024&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:es-username&nbsp;{:description&nbsp;&quot;Username&nbsp;for&nbsp;the&nbsp;ES&nbsp;Server&quot;
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                025&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:string}
-                </span><br/>
-<span class="covered" title="7 out of 7 forms covered">
-                026&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:es-password&nbsp;{:description&nbsp;&quot;Password&nbsp;for&nbsp;the&nbsp;ES&nbsp;Server&quot;
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                027&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:string
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                028&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:secret&nbsp;true}
-                </span><br/>
-<span class="covered" title="6 out of 6 forms covered">
-                029&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:conf&nbsp;{:description&nbsp;&quot;Configuration&nbsp;file&quot;
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                030&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:file
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                031&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:verifier&nbsp;cfg&#x2F;verify-file-exists}})
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                032&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="2 out of 2 forms covered">
-                033&nbsp;&nbsp;(cfg&#x2F;populate-from-properties)
-                </span><br/>
-<span class="partial" title="6 out of 9 forms covered">
-                034&nbsp;&nbsp;(when-let&nbsp;[conf&nbsp;(cfg&#x2F;get&nbsp;:conf)]
-                </span><br/>
-<span class="not-covered" title="0 out of 3 forms covered">
-                035&nbsp;&nbsp;&nbsp;&nbsp;(cfg&#x2F;populate-from-file&nbsp;conf))
-                </span><br/>
-<span class="covered" title="2 out of 2 forms covered">
-                036&nbsp;&nbsp;(cfg&#x2F;populate-from-env)
-                </span><br/>
-<span class="covered" title="4 out of 4 forms covered">
-                037&nbsp;&nbsp;(cfg&#x2F;verify&nbsp;:quit-on-error&nbsp;true)
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                038&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                039&nbsp;&nbsp;(defn&nbsp;add-trailing-backslash
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                040&nbsp;&nbsp;&nbsp;&nbsp;[link]
-                </span><br/>
-<span class="covered" title="7 out of 7 forms covered">
-                041&nbsp;&nbsp;&nbsp;&nbsp;(if-not&nbsp;(str&#x2F;ends-with?&nbsp;link&nbsp;&quot;&#x2F;&quot;)
-                </span><br/>
-<span class="covered" title="5 out of 5 forms covered">
-                042&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;link&nbsp;&quot;&#x2F;&quot;)&nbsp;link))
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                043&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                044&nbsp;&nbsp;(defn&nbsp;ping-server
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                045&nbsp;&nbsp;&nbsp;&nbsp;[server]
-                </span><br/>
-<span class="covered" title="8 out of 8 forms covered">
-                046&nbsp;&nbsp;&nbsp;&nbsp;(try&nbsp;(let&nbsp;[server-url&nbsp;(str&nbsp;(add-trailing-backslash&nbsp;server)&nbsp;&quot;_cluster&#x2F;health&quot;)
-                </span><br/>
-<span class="covered" title="6 out of 6 forms covered">
-                047&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:keys&nbsp;[body&nbsp;status]}&nbsp;(http&#x2F;get&nbsp;server-url&nbsp;{:accept&nbsp;:json})]
-                </span><br/>
-<span class="covered" title="7 out of 7 forms covered">
-                048&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:body&nbsp;(json&#x2F;parse-string&nbsp;body&nbsp;true)
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                049&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:status&nbsp;status})
-                </span><br/>
-<span class="covered" title="3 out of 3 forms covered">
-                050&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(catch&nbsp;Exception&nbsp;_&nbsp;{:status&nbsp;405})))
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                051&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                052&nbsp;&nbsp;(defn&nbsp;server-up?
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                053&nbsp;&nbsp;&nbsp;&nbsp;[server]
-                </span><br/>
-<span class="covered" title="4 out of 4 forms covered">
-                054&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[{:keys&nbsp;[status]&nbsp;{:keys&nbsp;[number_of_nodes]}&nbsp;:body}&nbsp;(ping-server&nbsp;server)]
-                </span><br/>
-<span class="partial" title="7 out of 9 forms covered">
-                055&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(and&nbsp;(=&nbsp;status&nbsp;200)
-                </span><br/>
-<span class="not-covered" title="0 out of 1 forms covered">
-                056&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&gt;=&nbsp;number_of_nodes&nbsp;1))))
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                057&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                058&nbsp;&nbsp;(defn&nbsp;generate-server-url-from-config
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                059&nbsp;&nbsp;&nbsp;&nbsp;[]
-                </span><br/>
-<span class="covered" title="6 out of 6 forms covered">
-                060&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;(cfg&#x2F;get&nbsp;:es-protocol)&nbsp;&quot;:&#x2F;&#x2F;&quot;
-                </span><br/>
-<span class="covered" title="8 out of 8 forms covered">
-                061&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(when-let-multiple
-                </span><br/>
-<span class="covered" title="4 out of 4 forms covered">
-                062&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[username&nbsp;(cfg&#x2F;get&nbsp;:es-username)
-                </span><br/>
-<span class="covered" title="3 out of 3 forms covered">
-                063&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password&nbsp;(cfg&#x2F;get&nbsp;:es-password)]
-                </span><br/>
-<span class="covered" title="6 out of 6 forms covered">
-                064&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;username&nbsp;&quot;:&quot;&nbsp;password&nbsp;&quot;@&quot;))
-                </span><br/>
-<span class="covered" title="3 out of 3 forms covered">
-                065&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(cfg&#x2F;get&nbsp;:es-hostname)
+                018&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:default&nbsp;&quot;http&quot;}
                 </span><br/>
 <span class="covered" title="9 out of 9 forms covered">
-                066&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(when-let&nbsp;[port&nbsp;(cfg&#x2F;get&nbsp;:es-port)]
-                </span><br/>
-<span class="covered" title="4 out of 4 forms covered">
-                067&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;&quot;:&quot;&nbsp;port))))
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                068&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                069&nbsp;&nbsp;(defn&nbsp;es-server
+                019&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:es-hostname&nbsp;{:description&nbsp;&quot;Where&nbsp;service&nbsp;is&nbsp;deployed&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                070&nbsp;&nbsp;&nbsp;&nbsp;[]
+                020&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:string
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                021&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:required&nbsp;true
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                022&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:default&nbsp;&quot;localhost&quot;}
+                </span><br/>
+<span class="covered" title="9 out of 9 forms covered">
+                023&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:es-port&nbsp;{:description&nbsp;&quot;HTTP&nbsp;port&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                024&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:number
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                025&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:required&nbsp;true
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                026&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:default&nbsp;9200}
+                </span><br/>
+<span class="covered" title="5 out of 5 forms covered">
+                027&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:es-username&nbsp;{:description&nbsp;&quot;Username&nbsp;for&nbsp;the&nbsp;ES&nbsp;Server&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                028&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:string}
+                </span><br/>
+<span class="covered" title="7 out of 7 forms covered">
+                029&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:es-password&nbsp;{:description&nbsp;&quot;Password&nbsp;for&nbsp;the&nbsp;ES&nbsp;Server&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                030&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:string
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                031&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:secret&nbsp;true}
+                </span><br/>
+<span class="covered" title="6 out of 6 forms covered">
+                032&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:conf&nbsp;{:description&nbsp;&quot;Configuration&nbsp;file&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                033&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;:file
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                034&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:verifier&nbsp;cfg&#x2F;verify-file-exists}})
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                035&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="2 out of 2 forms covered">
+                036&nbsp;&nbsp;(cfg&#x2F;populate-from-properties)
+                </span><br/>
+<span class="partial" title="6 out of 9 forms covered">
+                037&nbsp;&nbsp;(when-let&nbsp;[conf&nbsp;(cfg&#x2F;get&nbsp;:conf)]
+                </span><br/>
+<span class="not-covered" title="0 out of 3 forms covered">
+                038&nbsp;&nbsp;&nbsp;&nbsp;(cfg&#x2F;populate-from-file&nbsp;conf))
+                </span><br/>
+<span class="covered" title="2 out of 2 forms covered">
+                039&nbsp;&nbsp;(cfg&#x2F;populate-from-env)
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                040&nbsp;&nbsp;(cfg&#x2F;verify&nbsp;:quit-on-error&nbsp;true)
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                041&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                042&nbsp;&nbsp;(defn&nbsp;add-trailing-backslash
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                043&nbsp;&nbsp;&nbsp;&nbsp;[link]
+                </span><br/>
+<span class="covered" title="7 out of 7 forms covered">
+                044&nbsp;&nbsp;&nbsp;&nbsp;(if-not&nbsp;(str&#x2F;ends-with?&nbsp;link&nbsp;&quot;&#x2F;&quot;)
+                </span><br/>
+<span class="covered" title="5 out of 5 forms covered">
+                045&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;link&nbsp;&quot;&#x2F;&quot;)&nbsp;link))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                046&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                047&nbsp;&nbsp;(defn&nbsp;ping-server
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                048&nbsp;&nbsp;&nbsp;&nbsp;[server]
+                </span><br/>
+<span class="covered" title="8 out of 8 forms covered">
+                049&nbsp;&nbsp;&nbsp;&nbsp;(try&nbsp;(let&nbsp;[server-url&nbsp;(str&nbsp;(add-trailing-backslash&nbsp;server)&nbsp;&quot;_cluster&#x2F;health&quot;)
+                </span><br/>
+<span class="covered" title="6 out of 6 forms covered">
+                050&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:keys&nbsp;[body&nbsp;status]}&nbsp;(http&#x2F;get&nbsp;server-url&nbsp;{:accept&nbsp;:json})]
+                </span><br/>
+<span class="covered" title="7 out of 7 forms covered">
+                051&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:body&nbsp;(json&#x2F;parse-string&nbsp;body&nbsp;true)
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                052&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:status&nbsp;status})
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                071&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[url&nbsp;(generate-server-url-from-config)
+                053&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(catch&nbsp;Exception&nbsp;_&nbsp;{:status&nbsp;405})))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                054&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                055&nbsp;&nbsp;(defn&nbsp;server-up?
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                056&nbsp;&nbsp;&nbsp;&nbsp;[server]
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                057&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[{:keys&nbsp;[status]&nbsp;{:keys&nbsp;[number_of_nodes]}&nbsp;:body}&nbsp;(ping-server&nbsp;server)]
+                </span><br/>
+<span class="partial" title="8 out of 9 forms covered">
+                058&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(and&nbsp;(=&nbsp;status&nbsp;200)
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                059&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&gt;=&nbsp;number_of_nodes&nbsp;1))))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                060&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                061&nbsp;&nbsp;(defn&nbsp;generate-server-url-from-config
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                062&nbsp;&nbsp;&nbsp;&nbsp;[]
+                </span><br/>
+<span class="covered" title="6 out of 6 forms covered">
+                063&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;(cfg&#x2F;get&nbsp;:es-protocol)&nbsp;&quot;:&#x2F;&#x2F;&quot;
+                </span><br/>
+<span class="partial" title="7 out of 8 forms covered">
+                064&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(when-let-multiple
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                065&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[username&nbsp;(cfg&#x2F;get&nbsp;:es-username)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                072&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is-server-up?&nbsp;(server-up?&nbsp;url)]
+                066&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password&nbsp;(cfg&#x2F;get&nbsp;:es-password)]
+                </span><br/>
+<span class="covered" title="6 out of 6 forms covered">
+                067&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;username&nbsp;&quot;:&quot;&nbsp;password&nbsp;&quot;@&quot;))
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                073&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(when&nbsp;is-server-up?
+                068&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(cfg&#x2F;get&nbsp;:es-hostname)
+                </span><br/>
+<span class="covered" title="9 out of 9 forms covered">
+                069&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(when-let&nbsp;[port&nbsp;(cfg&#x2F;get&nbsp;:es-port)]
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                070&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(str&nbsp;&quot;:&quot;&nbsp;port))))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                071&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                072&nbsp;&nbsp;(defn&nbsp;es-server
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                073&nbsp;&nbsp;&nbsp;&nbsp;[]
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                074&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(add-trailing-backslash&nbsp;url))))
+                074&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[url&nbsp;(generate-server-url-from-config)
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                075&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is-server-up?&nbsp;(server-up?&nbsp;url)]
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                076&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(when&nbsp;is-server-up?
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                077&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(add-trailing-backslash&nbsp;url))))
                 </span><br/>
  </body>
 </html>
